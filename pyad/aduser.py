@@ -70,5 +70,17 @@ class ADUser(ADObject):
     def unlock(self):
         """Unlock the user's account"""
         self.update_attribute('lockoutTime',0)
-            
+
+    def set_managedby(self, user, flush=True):
+        """Sets managedBy on object to the specified user"""
+        if user:
+            assert user.__class__.__str__ == 'ADUser'
+            self.update_attribute('manager', user.dn, no_flush=(not flush))
+        else:
+            self.clear_managedby('manager',flush=flush)
+
+    def clear_managedby(self,flush=True):
+        """Sets object to be managedBy nobody"""
+        self.clear_attribute('manager',flush=flush)
+
 ADObject._py_ad_object_mappings['user'] = ADUser
