@@ -3,6 +3,11 @@ Introduction
 
 pyad is a Python library designed to provide a simple, Pythonic interface to Active Directory through ADSI on the Windows platform. Complete documentation can be found at http://zakird.github.io/pyad/. Code is maintained at https://github.com/zakird/pyad. The library can be downloaded from PyPI at https://pypi.python.org/pypi/pyad.
 
+Breaking Changes from upstream
+==============================
+
+ADObject:
+- Methods _get_password_last_set, get_last_login, get_uSNChanged return false intead of uncaught exceptions
 
 Requirements
 ============
