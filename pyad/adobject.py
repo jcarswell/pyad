@@ -362,9 +362,9 @@ class ADObject(ADBase):
         More information can be found at http://msdn.microsoft.com/en-us/library/aa772300.aspx.
         newValue accepts boolean values"""
         if userFlag not in list(ADS_USER_FLAG.keys()):
-            raise InvalidValue("userFlag",userFlag,list(ADS_USER_FLAG.keys()))
+            raise KeyError("userFlag",userFlag,list(ADS_USER_FLAG.keys()))
         elif newValue not in (True, False):
-            raise InvalidValue("newValue",newValue,[True,False])
+            raise ValueError("newValue",newValue,[True,False])
         else:
             # retreive the userAccountControl as if it didn't have the flag in question set.
             if self.get_attribute('userAccountControl',False) & ADS_USER_FLAG[userFlag] :
@@ -398,18 +398,33 @@ class ADObject(ADBase):
             pyadutils.pass_up_com_exception(excpt)
 
     def _get_password_last_set(self):
+        """
+        Get the last time the objects password was set
+        
+        Raises: 
+            ValueError: if the attribute is not set
+        """
         # http://www.microsoft.com/technet/scriptcenter/topics/win2003/lastlogon.mspx
         # kudos to http://docs.activestate.com/activepython/2.6/pywin32/html/com/help/active_directory.html
-        return pyadutils.convert_datetime(self.get_attribute('pwdLastSet', False))
-        
+        try:
+            return pyadutils.convert_datetime(self.get_attribute('pwdLastSet', False))
+        except ValueError:
+            return False
+
     def get_last_login(self):
         """Returns datetime object of when user last login on the connected domain controller."""
-        return pyadutils.convert_datetime(self.get_attribute('lastLogonTimestamp', False))
+        try:
+            return pyadutils.convert_datetime(self.get_attribute('lastLogonTimestamp', False))
+        except ValueError:
+            return False
 
     def get_uSNChanged(self):
         """Returns uSNChanged as a single integer from the current domain controller"""
-        return pyadutils.convert_bigint(self.get_attribute('uSNChanged', False)) 
-        
+        try:
+            return pyadutils.convert_bigint(self.get_attribute('uSNChanged', False))
+        except ValueError:
+            return False
+
     def move(self, new_ou_object):
         """Moves the object to a new organizationalUnit.
 
