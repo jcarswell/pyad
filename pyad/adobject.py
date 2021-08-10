@@ -202,8 +202,11 @@ class ADObject(ADBase):
             raise AttributeError(attribute)
 
     def _flush(self):
-        "Commits any changes to the AD object."
-        return self._ldap_adsi_obj.SetInfo()
+        """Commits any changes to the AD object."""
+        self._ldap_adsi_obj.SetInfo()
+    
+    def flush(self):
+        self._flush()
     
     def __set_gc_adsi_obj(self):
         path = pyadutils.generate_ads_path(
@@ -303,46 +306,50 @@ class ADObject(ADBase):
             except pywintypes.com_error as excpt:
                 pyadutils.pass_up_com_exception(excpt)
 
-    def clear_attribute(self, attribute):
+    def clear_attribute(self, attribute, flush=True):
         """Clears (removes) the specified LDAP attribute from the object.
         Identical to setting the attribute to None or []."""
         if self.get_attribute(attribute) != []:
             self._set_attribute(attribute, 1, [])
-            self._flush()
+            if flush:
+                self._flush()
 
     def update_attribute(self, attribute, newvalue, no_flush=False):
         """Updates any mutable LDAP attribute for the object. If you are adding or removing
         values from a multi-valued attribute, see append_to_attribute and remove_from_attribute."""
         if newvalue in ((),[],None,''):
-            return self.clear_attribute(attribute)
+            return self.clear_attribute(attribute, not no_flush)
         elif pyadutils.generate_list(newvalue) != self.get_attribute(attribute):
             self._set_attribute(attribute, 2, pyadutils.generate_list(newvalue))
             if not no_flush:
                 self._flush()
 
-    def update_attributes(self, attribute_value_dict):
+    def update_attributes(self, attribute_value_dict, flush=True):
         """Updates multiple attributes in a single transaction
         attribute_value_dict should contain a dictionary of values keyed by attribute name"""
         for k, v in attribute_value_dict.items():
             self.update_attribute(k,v,True)
-        self._flush()
+        if flush:
+            self._flush()
 
-    def append_to_attribute(self, attribute, valuesToAppend):
+    def append_to_attribute(self, attribute, valuesToAppend, flush=True):
         """Appends values in list valuesToAppend to the specified multi-valued attribute.
         valuesToAppend can contain a single value or a list of multiple values."""
         difference = list(set(pyadutils.generate_list(valuesToAppend)) \
                         - set(self.get_attribute(attribute)))
         if len(difference) != 0:
             self._set_attribute(attribute,3,difference)
-            self._flush()
+            if flush:
+                self._flush()
 
-    def remove_from_attribute(self, attribute, valuesToRemove):
+    def remove_from_attribute(self, attribute, valuesToRemove, flush=True):
         """Removes any values in list valuesToRemove from the specified multi-valued attribute."""
         difference = list(set(pyadutils.generate_list(valuesToRemove)) \
                         & set(self.get_attribute(attribute)))
         if len(difference) != 0:
             self._set_attribute(attribute,4,difference)
-            self._flush()
+            if flush:
+                self._flush()
 
     def get_user_account_control_settings(self):
         """Returns a dictionary of settings stored within UserAccountControl.
@@ -379,21 +386,23 @@ class ADObject(ADBase):
                 nv = nv | ADS_USER_FLAG[userFlag]
             self.update_attribute('userAccountControl',nv)
 
-    def disable(self):
+    def disable(self, flush=True):
         """Disables the user or computer"""
         try:
             if self._ldap_adsi_obj.AccountDisabled == False:
                 self._ldap_adsi_obj.AccountDisabled = True
-                self._flush()
+                if flush:
+                    self._flush()
         except pywintypes.com_error as excpt:
             pyadutils.pass_up_com_exception(excpt)
 
-    def enable(self):
+    def enable(self, flush=True):
         """Enables the user or computer"""
         try:
             if self._ldap_adsi_obj.AccountDisabled == True:
                 self._ldap_adsi_obj.AccountDisabled = False
-                self._flush()
+                if flush:
+                    self._flush()
         except pywintypes.com_error as excpt:
             pyadutils.pass_up_com_exception(excpt)
 
@@ -478,13 +487,13 @@ class ADObject(ADBase):
         group expects an ADGroup object to which the current object belongs."""
         group.remove_members(self)
 
-    def set_managedby(self, user):
+    def set_managedby(self, user, flush=True):
         """Sets managedBy on object to the specified user"""
         if user:
             assert user.__class__.__str__ == 'ADUser'
-            self.update_attribute('managedBy', user.dn)
+            self.update_attribute('managedBy', user.dn,no_flush=(not flush))
         else:
-            self.clear_attribute('managedBy')
+            self.clear_attribute('managedBy',flush=flush)
 
     def clear_managedby(self):
         """Sets object to be managedBy nobody"""
