@@ -82,7 +82,8 @@ def convert_datetime(adsi_time_com_obj):
     """Converts 64-bit integer COM object representing time into a python datetime object."""
     # credit goes to John Nielsen who documented this at
     # http://docs.activestate.com/activepython/2.6/pywin32/html/com/help/active_directory.html.
-
+    if not hasattr(adsi_time_com_obj,'highpart') or not hasattr(adsi_time_com_obj,'lowpart'):
+        raise ValueError(f"Expexted adsi_time object got {type(adsi_time_com_obj)}")
     high_part = int(adsi_time_com_obj.highpart) << 32
     low_part = int(adsi_time_com_obj.lowpart)
     date_value = ((high_part + low_part) - 116444736000000000) // 10000000
@@ -98,10 +99,13 @@ def convert_datetime(adsi_time_com_obj):
 
 def convert_bigint(obj):
     # based on http://www.selfadsi.org/ads-attributes/user-usnChanged.htm
-    h, l = obj.HighPart, obj.LowPart
-    if l < 0:
-        h += 1
-    return (h << 32) + l
+    if hasattr(obj,'HighPart') and hasattr(obj,'LowPart'):
+        h, l = obj.HighPart, obj.LowPart
+        if l < 0:
+            h += 1
+        return (h << 32) + l
+    else:
+        raise ValueError(f"Expexted adsi time object got {type(obj)}")
 
 def convert_timespan(obj):
     """Converts COM object representing timespan to a python timespan object."""

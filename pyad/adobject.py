@@ -202,8 +202,11 @@ class ADObject(ADBase):
             raise AttributeError(attribute)
 
     def _flush(self):
-        "Commits any changes to the AD object."
-        return self._ldap_adsi_obj.SetInfo()
+        """Commits any changes to the AD object."""
+        self._ldap_adsi_obj.SetInfo()
+    
+    def flush(self):
+        self._flush()
     
     def __set_gc_adsi_obj(self):
         path = pyadutils.generate_ads_path(
@@ -303,46 +306,50 @@ class ADObject(ADBase):
             except pywintypes.com_error as excpt:
                 pyadutils.pass_up_com_exception(excpt)
 
-    def clear_attribute(self, attribute):
+    def clear_attribute(self, attribute, flush=True):
         """Clears (removes) the specified LDAP attribute from the object.
         Identical to setting the attribute to None or []."""
         if self.get_attribute(attribute) != []:
             self._set_attribute(attribute, 1, [])
-            self._flush()
+            if flush:
+                self._flush()
 
     def update_attribute(self, attribute, newvalue, no_flush=False):
         """Updates any mutable LDAP attribute for the object. If you are adding or removing
         values from a multi-valued attribute, see append_to_attribute and remove_from_attribute."""
         if newvalue in ((),[],None,''):
-            return self.clear_attribute(attribute)
+            return self.clear_attribute(attribute, not no_flush)
         elif pyadutils.generate_list(newvalue) != self.get_attribute(attribute):
             self._set_attribute(attribute, 2, pyadutils.generate_list(newvalue))
             if not no_flush:
                 self._flush()
 
-    def update_attributes(self, attribute_value_dict):
+    def update_attributes(self, attribute_value_dict, flush=True):
         """Updates multiple attributes in a single transaction
         attribute_value_dict should contain a dictionary of values keyed by attribute name"""
         for k, v in attribute_value_dict.items():
             self.update_attribute(k,v,True)
-        self._flush()
+        if flush:
+            self._flush()
 
-    def append_to_attribute(self, attribute, valuesToAppend):
+    def append_to_attribute(self, attribute, valuesToAppend, flush=True):
         """Appends values in list valuesToAppend to the specified multi-valued attribute.
         valuesToAppend can contain a single value or a list of multiple values."""
         difference = list(set(pyadutils.generate_list(valuesToAppend)) \
                         - set(self.get_attribute(attribute)))
         if len(difference) != 0:
             self._set_attribute(attribute,3,difference)
-            self._flush()
+            if flush:
+                self._flush()
 
-    def remove_from_attribute(self, attribute, valuesToRemove):
+    def remove_from_attribute(self, attribute, valuesToRemove, flush=True):
         """Removes any values in list valuesToRemove from the specified multi-valued attribute."""
         difference = list(set(pyadutils.generate_list(valuesToRemove)) \
                         & set(self.get_attribute(attribute)))
         if len(difference) != 0:
             self._set_attribute(attribute,4,difference)
-            self._flush()
+            if flush:
+                self._flush()
 
     def get_user_account_control_settings(self):
         """Returns a dictionary of settings stored within UserAccountControl.
@@ -362,9 +369,9 @@ class ADObject(ADBase):
         More information can be found at http://msdn.microsoft.com/en-us/library/aa772300.aspx.
         newValue accepts boolean values"""
         if userFlag not in list(ADS_USER_FLAG.keys()):
-            raise InvalidValue("userFlag",userFlag,list(ADS_USER_FLAG.keys()))
+            raise KeyError("userFlag",userFlag,list(ADS_USER_FLAG.keys()))
         elif newValue not in (True, False):
-            raise InvalidValue("newValue",newValue,[True,False])
+            raise ValueError("newValue",newValue,[True,False])
         else:
             # retreive the userAccountControl as if it didn't have the flag in question set.
             if self.get_attribute('userAccountControl',False) & ADS_USER_FLAG[userFlag] :
@@ -379,37 +386,54 @@ class ADObject(ADBase):
                 nv = nv | ADS_USER_FLAG[userFlag]
             self.update_attribute('userAccountControl',nv)
 
-    def disable(self):
+    def disable(self, flush=True):
         """Disables the user or computer"""
         try:
             if self._ldap_adsi_obj.AccountDisabled == False:
                 self._ldap_adsi_obj.AccountDisabled = True
-                self._flush()
+                if flush:
+                    self._flush()
         except pywintypes.com_error as excpt:
             pyadutils.pass_up_com_exception(excpt)
 
-    def enable(self):
+    def enable(self, flush=True):
         """Enables the user or computer"""
         try:
             if self._ldap_adsi_obj.AccountDisabled == True:
                 self._ldap_adsi_obj.AccountDisabled = False
-                self._flush()
+                if flush:
+                    self._flush()
         except pywintypes.com_error as excpt:
             pyadutils.pass_up_com_exception(excpt)
 
     def _get_password_last_set(self):
+        """
+        Get the last time the objects password was set
+        
+        Raises: 
+            ValueError: if the attribute is not set
+        """
         # http://www.microsoft.com/technet/scriptcenter/topics/win2003/lastlogon.mspx
         # kudos to http://docs.activestate.com/activepython/2.6/pywin32/html/com/help/active_directory.html
-        return pyadutils.convert_datetime(self.get_attribute('pwdLastSet', False))
-        
+        try:
+            return pyadutils.convert_datetime(self.get_attribute('pwdLastSet', False))
+        except ValueError:
+            return False
+
     def get_last_login(self):
         """Returns datetime object of when user last login on the connected domain controller."""
-        return pyadutils.convert_datetime(self.get_attribute('lastLogonTimestamp', False))
+        try:
+            return pyadutils.convert_datetime(self.get_attribute('lastLogonTimestamp', False))
+        except ValueError:
+            return False
 
     def get_uSNChanged(self):
         """Returns uSNChanged as a single integer from the current domain controller"""
-        return pyadutils.convert_bigint(self.get_attribute('uSNChanged', False)) 
-        
+        try:
+            return pyadutils.convert_bigint(self.get_attribute('uSNChanged', False))
+        except ValueError:
+            return False
+
     def move(self, new_ou_object):
         """Moves the object to a new organizationalUnit.
 
@@ -463,13 +487,13 @@ class ADObject(ADBase):
         group expects an ADGroup object to which the current object belongs."""
         group.remove_members(self)
 
-    def set_managedby(self, user):
+    def set_managedby(self, user, flush=True):
         """Sets managedBy on object to the specified user"""
         if user:
             assert user.__class__.__str__ == 'ADUser'
-            self.update_attribute('managedBy', user.dn)
+            self.update_attribute('managedBy', user.dn,no_flush=(not flush))
         else:
-            self.clear_attribute('managedBy')
+            self.clear_attribute('managedBy',flush=flush)
 
     def clear_managedby(self):
         """Sets object to be managedBy nobody"""
