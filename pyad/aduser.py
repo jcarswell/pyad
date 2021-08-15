@@ -17,20 +17,21 @@ class ADUser(ADObject):
             optional_attributes=optional_attributes
         )
 
-    def set_password(self, password):
+    def set_password(self, password, flush=True):
         """Sets the users password"""
         try:
             self._ldap_adsi_obj.SetPassword(password)
-            self._flush()
+            if flush:
+                self._flush()
         except pywintypes.com_error as excpt: 
             pyadutils.pass_up_com_exception(excpt)
 
-    def force_pwd_change_on_login(self): 
+    def force_pwd_change_on_login(self,flush=True): 
         """Forces the user to change their password the next time they login"""
-        self.update_attribute('PwdLastSet',0)
+        self.update_attribute('PwdLastSet',0,no_flush=(not flush))
     
-    def grant_password_lease(self): 
-        self.update_attribute('PwdLastSet',-1)
+    def grant_password_lease(self,flush=True):
+        self.update_attribute('PwdLastSet',-1,no_flush=(not flush))
 
     def get_password_last_set(self): 
         """Returns datetime object of when user last reset their password."""
@@ -54,10 +55,11 @@ class ADUser(ADObject):
         else:
             return self.get_password_last_set() + self.get_max_pwd_age()
             
-    def set_expiration(self, dt):
+    def set_expiration(self, dt, flush=True):
         """Sets the expiration date of the password to the given value"""
         self._ldap_adsi_obj.AccountExpirationDate = dt
-        self._flush()
+        if flush:
+            self._flush()
         
     def get_password_expired(self):
         """Returns a bool representing whether the password has expired.
@@ -67,16 +69,15 @@ class ADUser(ADObject):
             return False
         return expiration_date < datetime.datetime.now()
         
-    def unlock(self):
+    def unlock(self,flush=True):
         """Unlock the user's account"""
-        self.update_attribute('lockoutTime',0)
+        self.update_attribute('lockoutTime',0,no_flush=(not flush))
 
     def set_managedby(self, user, flush=True):
         """Sets managedBy on object to the specified user"""
         if not isinstance(user,ADUser):
             raise ValueError(f'Expexted AD User object got {type(user)}')
         if user:
-            assert isinstance(user,ADUser)
             self.update_attribute('manager', user.dn, no_flush=(not flush))
         else:
             self.clear_managedby('manager',flush=flush)
