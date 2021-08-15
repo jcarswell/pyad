@@ -73,8 +73,10 @@ class ADUser(ADObject):
 
     def set_managedby(self, user, flush=True):
         """Sets managedBy on object to the specified user"""
+        if not isinstance(user,ADUser):
+            raise ValueError(f'Expexted AD User object got {type(user)}')
         if user:
-            assert user.__class__.__str__ == 'ADUser'
+            assert isinstance(user,ADUser)
             self.update_attribute('manager', user.dn, no_flush=(not flush))
         else:
             self.clear_managedby('manager',flush=flush)
