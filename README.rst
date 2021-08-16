@@ -9,6 +9,8 @@ Breaking Changes from upstream
 ADObject:
 - Methods _get_password_last_set, get_last_login, get_uSNChanged return false intead of uncaught exceptions
 
+Importing pyad directly exposes set_defaults, ADQuery, ADComputer, ADContainer, ADDomain, ADGroup, ADUser, from_cn, from_dn, from_guid. Importing pyad.pyad no longer imports the sub modules
+
 Requirements
 ============
 
