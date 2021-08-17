@@ -23,7 +23,7 @@ setup(
     packages=[
         'pyad'
     ],
-    long_description = read('README.rst'),
+    long_description = read('README.md'),
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: Apache Software License",
