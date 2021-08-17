@@ -1,17 +1,8 @@
 import unittest
 import pyad
+from .config import TestConfiguration
 
-class ADTestCase(unittest.TestCase):
-    SANDBOX_OU = "ou=testing,dc=example,dc=com"
-    SANDBOX_DOMAIN = "dc=example,dc=com"
-    SANDBOX_FOREST = "dc=example,dc=com"
-    
-    TEST_DC = 'dc01'
-    
-    KNOWN_EXISTS_USER = 'testuset'
-    KNOWN_EXISTS_COMPUTER = 'testcomputer'
-    KNOWN_DNE_OBJECT = "testdne"
-
+class ADTestCase(unittest.TestCase,TestConfiguration):
     def assertHasAttribute(self, obj, attribute):
         self.assertTrue(hasattr(obj._ldap_adsi_obj, attribute))
         
