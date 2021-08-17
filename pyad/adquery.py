@@ -26,7 +26,7 @@ class ADQuery(ADBase):
     # the methodology for performing a command with credentials
     # and for forcing encryption can be found at http://goo.gl/GGCK5
 
-    def __init__(self, options={}):
+    def __init__(self, options:dict ={}) -> None:
         self.__adodb_conn = win32com.client.Dispatch("ADODB.Connection")
         if self.default_username and self.default_password:
             self.__adodb_conn.Provider = u"ADsDSOObject"
@@ -42,14 +42,14 @@ class ADQuery(ADBase):
 
         self.reset()
 
-    def reset(self):
+    def reset(self) -> None:
         self.__rs = self.__rc = None
         self.__queried = False
         self.__position = 0
 
-    def execute_query(self, attributes=["distinguishedName"], where_clause=None,
-                    type="LDAP", base_dn=None, page_size=1000,
-                    search_scope="subtree", options={}, ldap_dialect=False):
+    def execute_query(self, attributes:list[str] =["distinguishedName"], where_clause:str =None,
+                    type:str ="LDAP", base_dn:str =None, page_size:int =1000, search_scope:str ="subtree",
+                    options:dict ={}, ldap_dialect:bool =False) -> None:
         assert type in ("LDAP", "GC")
         if not base_dn:
             if type == "LDAP":
@@ -86,7 +86,7 @@ class ADQuery(ADBase):
         self.__queried = True
 
     @property
-    def row_count(self):
+    def row_count(self) -> int:
         return self.__rs.RecordCount
 
     def get_row_count(self):
@@ -108,9 +108,14 @@ class ADQuery(ADBase):
             raise noExecutedQuery
         if not self.__rs.EOF and self.__position == 0:
             self.__rs.MoveFirst()
+            self.__position = 1
         d = {}
         for f in self.__rs.Fields:
             d[f.Name] = f.Value
+
+        self.__position += 1
+        self.__rs.MoveNext()
+
         return d
 
     def get_results(self) -> list[dict]:
@@ -118,11 +123,13 @@ class ADQuery(ADBase):
             raise noExecutedQuery
         if not self.__rs.EOF:
             self.__rs.MoveFirst()
+            self.__position = 1
         while not self.__rs.EOF:
             d = {}
             for f in self.__rs.Fields:
                 d[f.Name] = f.Value
             yield d
+            self.__position += 1
             self.__rs.MoveNext()
 
     def get_all_results(self) -> list:
