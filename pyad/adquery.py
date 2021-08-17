@@ -45,6 +45,7 @@ class ADQuery(ADBase):
     def reset(self):
         self.__rs = self.__rc = None
         self.__queried = False
+        self.__position = 0
 
     def execute_query(self, attributes=["distinguishedName"], where_clause=None,
                     type="LDAP", base_dn=None, page_size=1000,
@@ -84,19 +85,35 @@ class ADQuery(ADBase):
         self.__rs, self.__rc = command.Execute()
         self.__queried = True
 
-    def get_row_count(self):
+    @property
+    def row_count(self):
         return self.__rs.RecordCount
 
-    def get_single_result(self):
-        if self.get_row_count() != 1:
-            raise invalidResults(self.get_row_count())
-        self.__rs.MoveFirst()
+    def get_row_count(self):
+        DeprecationWarning("User the row_count property instead")
+        return self.__rs.RecordCount
+
+    def get_single_result(self) -> dict:
+        """
+        Gets the next result in the result set.
+
+        Raises:
+            noExecutedQuery: if called before calling execute_query()
+
+        Returns:
+            dict: a dictionary contining the values for the query result
+        """
+
+        if not self.__queried:
+            raise noExecutedQuery
+        if not self.__rs.EOF and self.__position == 0:
+            self.__rs.MoveFirst()
         d = {}
         for f in self.__rs.Fields:
             d[f.Name] = f.Value
         return d
 
-    def get_results(self):
+    def get_results(self) -> list[dict]:
         if not self.__queried:
             raise noExecutedQuery
         if not self.__rs.EOF:
@@ -108,10 +125,26 @@ class ADQuery(ADBase):
             yield d
             self.__rs.MoveNext()
 
-    def get_all_results(self):
+    def get_all_results(self) -> list:
         if not self.__queried:
             raise noExecutedQuery
         l = []
         for d in self.get_results():
             l.append(d)
         return l
+
+    def seek(self,pos:int) -> int:
+        if pos > self.row_count:
+            raise ValueError("Cannot seek past end of result")
+        self.__rs.MoveFirst()
+        self.__position = 1
+        for x in len(pos):
+            self.MoveNext()
+            self.__position += 1
+            if self.__position == pos:
+                break
+        
+        return self.__position
+
+    def tell(self) -> int:
+        return self.__position
