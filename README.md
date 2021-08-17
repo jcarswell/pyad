@@ -7,6 +7,7 @@ Breaking Changes from upstream
 ==============================
 
 ADObject:
+
 - Methods _get_password_last_set, get_last_login, get_uSNChanged return false intead of uncaught exceptions
 
 Importing pyad directly exposes set_defaults, ADQuery, ADComputer, ADContainer, ADDomain, ADGroup, ADUser, from_cn, from_dn, from_guid. Importing pyad.pyad no longer imports the sub modules
@@ -138,6 +139,12 @@ As shown above, objects can be directly connected to via CN, DN, GUID, or UPN. H
 
     for row in q.get_results():
         print row["distinguishedName"]
+
+Testing
+=======
+
+To run unittest you will need to set the configuration to be specific to your environment. To do this you will need to edit config.py located in the tests folder.
+
 
 License
 =======
