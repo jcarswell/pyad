@@ -1,5 +1,9 @@
 
-__all__ = ["set_defaults", "ADQuery", "ADComputer", "ADContainer", "ADDomain", "ADGroup", "ADUser","from_cn","from_dn","from_guid"]
+__all__ = ["set_defaults","ADQuery","ADComputer","ADContainer","ADDomain","ADGroup",
+           "ADUser","from_cn","from_dn","from_guid","comException",
+           "genericADSIException","win32Exception","invalidOwnerException",
+           "noObjectFoundException","InvalidObjectException","InvalidAttribute",
+           "noExecutedQuery","invalidResults"]
 
 def _check_requirments():
     import sys
@@ -27,3 +31,7 @@ from .addomain import ADDomain
 from .adgroup import ADGroup
 from .aduser import  ADUser
 from .pyad import from_cn,from_dn,from_guid
+from .pyadexceptions import (comException,genericADSIException,win32Exception,
+                             invalidOwnerException,noObjectFoundException,
+                             InvalidObjectException,InvalidAttribute,
+                             noExecutedQuery,invalidResults)
