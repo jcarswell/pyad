@@ -41,6 +41,8 @@ class ADContainer(ADObject):
                 pyadobj.enable()
             if password:
                 pyadobj.set_password(password)
+            pyadobj.set_user_account_control_setting('NORMAL_ACCOUNT',True)
+            pyadobj.set_user_account_control_setting('PASSWD_NOTREQD',False)
             pyadobj.update_attributes(optional_attributes)
             return pyadobj
         except pywintypes.com_error as e: 
