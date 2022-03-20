@@ -1,9 +1,11 @@
-from __future__ import absolute_import
-from .adobject import *
+import pywintypes
+
+from .adobject import ADObject
 from .aduser import ADUser
 from .adcomputer import ADComputer
 from .adgroup import ADGroup
 from . import pyadconstants
+from . import pyadutils
 
 class ADContainer(ADObject):
     def get_children_iter(self, recursive=False, filter_=None):
