@@ -1,13 +1,14 @@
-from __future__ import absolute_import
-from builtins import str
-from .adobject import *
+from .adobject import ADObject
+from .aduser import ADUser
+from . import pyadutils
+from . import adsearch
 
 class ADComputer(ADObject):
     """Python class representing a computer object in Active Directory."""
     @classmethod
     def create(cls, name, container_object, enable=True, optional_attributes={}):
         """Creates and returns a new computer object."""
-        assert type(name) == str
+        assert isinstance(name,str)
         assert container_object.__class__.__name__ == 'ADContainer'
         return container_object.create_computer(name=name,enable=enable,optional_attributes=optional_attributes)
 
