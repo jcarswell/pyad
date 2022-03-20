@@ -5,7 +5,7 @@ __all__ = ["set_defaults","ADQuery","ADComputer","ADContainer","ADDomain","ADGro
            "noObjectFoundException","InvalidObjectException","InvalidAttribute",
            "noExecutedQuery","invalidResults"]
 
-def _check_requirments():
+def _check_requirements():
     import sys
     import importlib
     required_version = (3, 6)
@@ -21,7 +21,7 @@ def _check_requirments():
             msg = f"{msg} {x}"
     if not cont:
         raise ImportError(msg)
-_check_requirments()
+_check_requirements()
 
 from .adbase import set_defaults
 from .adquery import ADQuery
