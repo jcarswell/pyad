@@ -1,6 +1,11 @@
-from __future__ import absolute_import
-from .adbase import *
+import win32com
+
+from warnings import warn
+
+from .adbase import ADBase
 from . import pyadutils
+from .pyadexceptions import noExecutedQuery
+
 
 class ADQuery(ADBase):
     # Requests secure authentication. When this flag is set,
@@ -90,22 +95,22 @@ class ADQuery(ADBase):
         return self.__rs.RecordCount
 
     def get_row_count(self):
-        DeprecationWarning("User the row_count property instead")
+        warn("User the row_count property instead",DeprecationWarning)
         return self.__rs.RecordCount
 
     def get_single_result(self) -> dict:
         """
-        Gets the next result in the result set.
+        get_single_result Gets the next result in the result set.
 
-        Raises:
-            noExecutedQuery: if called before calling execute_query()
-
-        Returns:
-            dict: a dictionary contining the values for the query result
+        :raises noExecutedQuery: if called before calling execute_query()
+        :return: values for the query result
+        :rtype: dict
         """
 
         if not self.__queried:
             raise noExecutedQuery
+        if self.row_count == 0:
+            return {}
         if not self.__rs.EOF and self.__position == 0:
             self.__rs.MoveFirst()
             self.__position = 1
@@ -118,9 +123,11 @@ class ADQuery(ADBase):
 
         return d
 
-    def get_results(self) -> list[dict]:
+    def get_results(self) -> dict:
         if not self.__queried:
             raise noExecutedQuery
+        if self.row_count == 0:
+            return {}
         if not self.__rs.EOF:
             self.__rs.MoveFirst()
             self.__position = 1
@@ -150,7 +157,7 @@ class ADQuery(ADBase):
             self.__position += 1
             if self.__position == pos:
                 break
-        
+
         return self.__position
 
     def tell(self) -> int:
