@@ -1,27 +1,16 @@
-from __future__ import print_function
-from __future__ import absolute_import
-from builtins import object
 import sys
-import datetime
-import time
-import types
-import xml.dom.minidom as xml
 
 # Since we're depending on ADSI, you have to be on windows...
 if sys.platform != 'win32':
     raise Exception("Must be running Windows in order to use pyad.")
 
 try:
-    import win32api
-    import pywintypes
     import win32com.client
-    import win32security
 except ImportError:
-    raise Exception("pywin32 library required. Download from http://sourceforge.net/projects/pywin32/")
+    raise ImportError("pywin32 library required. Download from http://sourceforge.net/projects/pywin32/")
 
 # Import constants and other common elements.
-from .pyadconstants import *
-from .pyadexceptions import *
+from .pyadexceptions import SetupError
 
 _adsi_provider = win32com.client.Dispatch('ADsNameSpaces')
 
@@ -87,13 +76,13 @@ class ADBase(object):
     def _safe_default_domain(self):
         if self.default_domain:
             return self.default_domain
-        raise Exception("Unable to detect default domain. Must specify search base.")
+        raise SetupError("Unable to detect default domain. Must specify search base.")
 
     @property
     def _safe_default_forest(self):
         if self.default_forest:
             return self.default_forest
-        raise Exception("Unable to detect default forest. Must specify search base.")
+        raise SetupError("Unable to detect default forest. Must specify search base.")
 
 def set_defaults(**kwargs):
     for k, v in kwargs.items():
