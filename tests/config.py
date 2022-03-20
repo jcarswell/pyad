@@ -5,6 +5,6 @@ class TestConfiguration:
     
     TEST_DC = 'dc01'
     
-    KNOWN_EXISTS_USER = 'testuset'
-    KNOWN_EXISTS_COMPUTER = 'testcomputer'
-    KNOWN_DNE_OBJECT = "testdne"    
+    KNOWN_EXISTS_USER = 'Known User'
+    KNOWN_EXISTS_COMPUTER = 'Known Computer'
+    KNOWN_DNE_OBJECT = "A Non-Existant Object"  #A know object that does not exist
