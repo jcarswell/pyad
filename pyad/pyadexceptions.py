@@ -33,7 +33,7 @@ class noObjectFoundException(BaseException):
 class InvalidObjectException(noObjectFoundException, win32Exception):
     pass
 
-class InvalidAttribute(AttributeError):
+class InvalidAttribute(BaseException,AttributeError):
     def __str__(self):
         return 'The attribute "%s" is not permitted by the schema definition of the object "%s" (the requested attribute does not exist).' % (self.attribute, self.obj)
 
@@ -49,3 +49,6 @@ class invalidResults(BaseException):
     
   def __str__(self):
     return 'The specified query returned %i results. getSingleResults only functions with a single result.' % self.number_results
+
+class SetupError(BaseException):
+    pass
