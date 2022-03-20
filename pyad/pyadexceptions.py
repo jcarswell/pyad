@@ -1,4 +1,7 @@
-class comException(Exception):
+class BaseException(Exception):
+    pass
+
+class comException(BaseException):
     def __init__(self, error_info, additional_info={}):
         self.error_info = error_info
         self.additional_info = additional_info
@@ -17,12 +20,12 @@ class win32Exception(comException):
         return "%s: %s" % (self.error_info['error_code'], self.error_info['message'])
 
 
-class invalidOwnerException(Exception):
+class invalidOwnerException(BaseException):
     def __str__(self):
         return "The submitted object is not eligible to own another object."
 
 
-class noObjectFoundException(Exception): 
+class noObjectFoundException(BaseException): 
     def __str__(self):
         return "The requested object does not exist."
 
@@ -35,12 +38,12 @@ class InvalidAttribute(AttributeError):
         return 'The attribute "%s" is not permitted by the schema definition of the object "%s" (the requested attribute does not exist).' % (self.attribute, self.obj)
 
 
-class noExecutedQuery(Exception):
+class noExecutedQuery(BaseException):
     def __str__(self):
         return 'No query has been executed. Therefore there are no results to return. Execute a query before requesting results.'
 
 
-class invalidResults(Exception):
+class invalidResults(BaseException):
   def __init__(self, numberResults):
     self.number_results = numberResults
     
