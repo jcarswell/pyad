@@ -1,5 +1,6 @@
 from __future__ import absolute_import
-from .adobject import *
+from .adobject import ADObject
+from . import pyadutils
 from . import pyadconstants
 
 class ADGroup(ADObject):
@@ -88,7 +89,7 @@ class ADGroup(ADObject):
                             & pyadconstants.ADS_GROUP_TYPE['SECURITY_ENABLED']) \
                             | pyadconstants.ADS_GROUP_TYPE[new_scope])
         else:
-            raise InvalidValue("new_scope",new_scope,('LOCAL','GLOBAL','UNIVERSAL'))
+            raise ValueError("new_scope",new_scope,('LOCAL','GLOBAL','UNIVERSAL'))
 
     def get_group_type(self):
         """Returns group type DISTRIBUTION or SECURITY."""
@@ -107,9 +108,9 @@ class ADGroup(ADObject):
         elif new_type == 'SECURITY':
             self.update_attribute('groupType',(self.get_attribute('groupType',False) \
                             ^ pyadconstants.ADS_GROUP_TYPE['SECURITY_ENABLED']) \
-                            | _ADS_GROUP_TYPE['SECURITY_ENABLED'])
+                            | pyadconstants._ADS_GROUP_TYPE['SECURITY_ENABLED'])
         else:
-            raise InvalidValue("new_type",new_type,('DISTRIBUTION','SECURITY'))
+            raise ValueError("new_type",new_type,('DISTRIBUTION','SECURITY'))
 
 ADObject._py_ad_object_mappings['group'] = ADGroup
 
