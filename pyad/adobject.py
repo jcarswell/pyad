@@ -269,20 +269,33 @@ class ADObject(ADBase):
         return list(set(self.get_mandatory_attributes() + self.get_optional_attributes()))
 
     def get_attribute(self, attribute, always_return_list=True, source='LDAP'):
-        """Returns the value of any allowable LDAP attribute of the specified object.
+        """
+        get_attribute Get an attribute from the AD Object that is represented by this class
 
-            Keyword arguments:
-              attribute -- any schema-allowed LDAP attribute (case insensitive). The attribute does not need to be defined.
-              always_return_list -- if an attribute has a single value, this specifies whether to return only the
-                value or to return a list containing the single value. Similarly, if true, a query on an undefined
-                attribute will return an empty list instead of a None object. If querying an attribute known to only
-                contain at most one element, then it is easier to set to false. Otherwise, if querying a potentially
-                multi-valued attribute, it is safest to leave at default.
-              source -- either 'LDAP' or 'GC'
+        Note to experienced ADSI users:
+        
+        - If an attribute is undefined, getAttribute() will return None or [] and will not 
+            choke on the attribute.
+        - In regards to always_return_list, True has similar behavior to getEx() whereas 
+            False is similar to Get().
 
-            Note to experienced ADSI users:
-              - If an attribute is undefined, getAttribute() will return None or [] and will not choke on the attribute.
-              - In regards to always_return_list, True has similar behavior to getEx() whereas False is similar to Get()."""
+        :param attribute: any schema-allowed LDAP attribute (case insensitive). The attribute 
+            does not need to be defined.
+        :type attribute: str
+        :param always_return_list: if an attribute has a single value, this specifies whether 
+            to return only the value or to return a list containing the single value. 
+            Similarly, if true, a query on an undefined attribute will return an empty list
+            instead of a None object. If querying an attribute known to only contain at most
+            one element, then it is easier to set to false. Otherwise, if querying a potentially
+            multi-valued attribute, it is safest to leave at default., defaults to True
+        :type always_return_list: bool, optional
+        :param source: One of [LDAP,GC], defaults to 'LDAP'
+        :type source: str, optional
+        :raises InvalidAttribute: The Requested attrubute doesn't exist or isn't valid for 
+            this object type
+        :return: a string like object or a list of strings
+        :rtype: AnyStr or List[AnyStr]
+        """
 
         if not hasattr(self._ldap_adsi_obj, attribute):
             raise InvalidAttribute(self.dn, attribute)
