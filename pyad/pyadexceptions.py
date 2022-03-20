@@ -50,5 +50,6 @@ class invalidResults(BaseException):
   def __str__(self):
     return 'The specified query returned %i results. getSingleResults only functions with a single result.' % self.number_results
 
+
 class SetupError(BaseException):
     pass
