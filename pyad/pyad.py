@@ -1,5 +1,5 @@
 from __future__ import absolute_import
-from .adobject import *
+from .adobject import ADObject
 from .pyadexceptions import InvalidObjectException, invalidResults
 
 def from_cn(common_name, search_base=None, options={}):
