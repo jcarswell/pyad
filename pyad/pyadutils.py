@@ -1,16 +1,28 @@
-from __future__ import division
-from __future__ import absolute_import
-from builtins import hex
-from builtins import chr
-from builtins import str
-from .adbase import *
-from datetime import timedelta
+import datetime
+import win32api
+import win32security
+import pywintypes
 
-def validate_credentials(username, password, domain=None):
-    """Validates credentaials; returns a PyHANDLE object with a bool value
+from .adbase import ADBase
+from .pyadconstants import GENERIC_ADSI_ERRORS,GENERIC_COM_ERRORS,WIN32_ERRORS
+from .pyadexceptions import genericADSIException, comException, win32Exception
+
+def validate_credentials(username:str, password:str, domain=None):
+    """
+    validate_credentials 
+    Validates credentials; returns a PyHANDLE object with a bool value
     of True if the credentials are valid, else returns None.
     Note that if the user would not be able to log on; for example,
     due to the account being expired; None will be returned.
+
+    :param username: username
+    :type username: str
+    :param password: password
+    :type password: str
+    :param domain: domain name, defaults to None
+    :type domain: str, optional
+    :return: PyHandle Object with a bool of true. or None
+    :rtype: win32.PyHandle
     """
     try:
         valid = win32security.LogonUser(username, domain, password,
@@ -25,7 +37,7 @@ def convert_error_code(error_code):
     """Convert error code from the format returned by pywin32 to the format that Microsoft documents everything in."""
     return error_code % 2 ** 32
 
-#expects the actualy pywintypes.com_error exception that's thrown...
+#expects the actually pywintypes.com_error exception that's thrown...
 def interpret_com_exception(excp, additional_info={}):
     d = {}
     d['error_num'] = convert_error_code(excp.args[2][5])
@@ -83,7 +95,7 @@ def convert_datetime(adsi_time_com_obj):
     # credit goes to John Nielsen who documented this at
     # http://docs.activestate.com/activepython/2.6/pywin32/html/com/help/active_directory.html.
     if not hasattr(adsi_time_com_obj,'highpart') or not hasattr(adsi_time_com_obj,'lowpart'):
-        raise ValueError(f"Expexted adsi_time object got {type(adsi_time_com_obj)}")
+        raise ValueError(f"Expected adsi_time object got '{adsi_time_com_obj.__class__.__name__}'")
     high_part = int(adsi_time_com_obj.highpart) << 32
     low_part = int(adsi_time_com_obj.lowpart)
     date_value = ((high_part + low_part) - 116444736000000000) // 10000000
@@ -105,12 +117,12 @@ def convert_bigint(obj):
             h += 1
         return (h << 32) + l
     else:
-        raise ValueError(f"Expexted adsi time object got {type(obj)}")
+        raise ValueError(f"Expected adsi time object got '{obj.__class__.__name__}'")
 
 def convert_timespan(obj):
     """Converts COM object representing timespan to a python timespan object."""
     as_seconds = abs(convert_bigint(obj))/10000000 #number of 100 nanoseconds in a second
-    return timedelta(seconds=as_seconds)
+    return datetime.timedelta(seconds=as_seconds)
 
 def convert_guid(guid_object):
     return pywintypes.IID(guid_object, True)
