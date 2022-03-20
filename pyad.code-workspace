@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"autoDocstring.docstringFormat": "sphinx",
+		"autoDocstring.includeName": true,
+		"autoDocstring.startOnNewLine": true,
+		"pythonIndent.trimLinesWithOnlyWhitespace": true,
+		"cSpell.words": [
+			"ADSI",
+			"NTLM",
+			"pyad"
+		]
+	}
+}
