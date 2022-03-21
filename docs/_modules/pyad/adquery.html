@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyad.adquery &#8212; Python Active Directory Tools 0.6 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Python Active Directory Tools 0.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyad.adquery</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyad.adquery</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">win32com</span>
+
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
+<span class="kn">from</span> <span class="nn">.adbase</span> <span class="kn">import</span> <span class="n">ADBase</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">pyadutils</span>
+<span class="kn">from</span> <span class="nn">.pyadexceptions</span> <span class="kn">import</span> <span class="n">noExecutedQuery</span>
+
+
+<div class="viewcode-block" id="ADQuery"><a class="viewcode-back" href="../../objects.html#pyad.ADQuery">[docs]</a><span class="k">class</span> <span class="nc">ADQuery</span><span class="p">(</span><span class="n">ADBase</span><span class="p">):</span>
+    <span class="c1"># Requests secure authentication. When this flag is set,</span>
+    <span class="c1"># Active Directory will use Kerberos, and possibly NTLM,</span>
+    <span class="c1"># to authenticate the client.</span>
+    <span class="n">ADS_SECURE_AUTHENTICATION</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c1"># Requires ADSI to use encryption for data</span>
+    <span class="c1"># exchange over the network.</span>
+    <span class="n">ADS_USE_ENCRYPTION</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="c1"># ADS_SCOPEENUM enumeration. Documented at http://goo.gl/83G1S</span>
+
+    <span class="c1"># Searches the whole subtree, including all the</span>
+    <span class="c1"># children and the base object itself.</span>
+    <span class="n">ADS_SCOPE_SUBTREE</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="c1"># Searches one level of the immediate children,</span>
+    <span class="c1"># excluding the base object.</span>
+    <span class="n">ADS_SCOPE_ONELEVEL</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c1"># Limits the search to the base object.</span>
+    <span class="c1"># The result contains, at most, one object.</span>
+    <span class="n">ADS_SCOPE_BASE</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># the methodology for performing a command with credentials</span>
+    <span class="c1"># and for forcing encryption can be found at http://goo.gl/GGCK5</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span><span class="nb">dict</span> <span class="o">=</span><span class="p">{})</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__adodb_conn</span> <span class="o">=</span> <span class="n">win32com</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Dispatch</span><span class="p">(</span><span class="s2">&quot;ADODB.Connection&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_username</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_password</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__adodb_conn</span><span class="o">.</span><span class="n">Provider</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;ADsDSOObject&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__adodb_conn</span><span class="o">.</span><span class="n">Properties</span><span class="p">(</span><span class="s2">&quot;User ID&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">Value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_username</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__adodb_conn</span><span class="o">.</span><span class="n">Properties</span><span class="p">(</span><span class="s2">&quot;Password&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">Value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_password</span>
+            <span class="n">adsi_flag</span> <span class="o">=</span> <span class="n">ADQuery</span><span class="o">.</span><span class="n">ADS_SECURE_AUTHENTICATION</span> <span class="o">|</span> \
+                            <span class="n">ADQuery</span><span class="o">.</span><span class="n">ADS_USE_ENCRYPTION</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__adodb_conn</span><span class="o">.</span><span class="n">Properties</span><span class="p">(</span><span class="s2">&quot;ADSI Flag&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">Value</span> <span class="o">=</span> <span class="n">adsi_flag</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__adodb_conn</span><span class="o">.</span><span class="n">Properties</span><span class="p">(</span><span class="s2">&quot;Encrypt Password&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">Value</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__adodb_conn</span><span class="o">.</span><span class="n">Open</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__adodb_conn</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="s2">&quot;Provider=ADSDSOObject&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rc</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__queried</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__position</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">execute_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span><span class="p">[</span><span class="s2">&quot;distinguishedName&quot;</span><span class="p">],</span> <span class="n">where_clause</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="nb">type</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span><span class="s2">&quot;LDAP&quot;</span><span class="p">,</span> <span class="n">base_dn</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">page_size</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">search_scope</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span><span class="s2">&quot;subtree&quot;</span><span class="p">,</span>
+                    <span class="n">options</span><span class="p">:</span><span class="nb">dict</span> <span class="o">=</span><span class="p">{},</span> <span class="n">ldap_dialect</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;LDAP&quot;</span><span class="p">,</span> <span class="s2">&quot;GC&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">base_dn</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;LDAP&quot;</span><span class="p">:</span>
+                <span class="n">base_dn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_safe_default_domain</span>
+            <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;GC&quot;</span><span class="p">:</span>
+                <span class="n">base_dn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_safe_default_forest</span>
+        <span class="c1"># https://docs.microsoft.com/en-us/windows/win32/adsi/searching-with-activex-data-objects-ado</span>
+
+        <span class="c1"># Ldap dialect</span>
+        <span class="k">if</span> <span class="n">ldap_dialect</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="n">pyadutils</span><span class="o">.</span><span class="n">generate_ads_path</span><span class="p">(</span><span class="n">base_dn</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_ldap_server</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_ldap_port</span><span class="p">)</span><span class="si">}</span><span class="s2">&gt;; </span><span class="si">{</span><span class="n">where_clause</span><span class="si">}</span><span class="s2">;</span><span class="si">{</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">attributes</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># SQL dialect</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT </span><span class="si">%s</span><span class="s2"> FROM &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">attributes</span><span class="p">),</span>
+                    <span class="n">pyadutils</span><span class="o">.</span><span class="n">generate_ads_path</span><span class="p">(</span><span class="n">base_dn</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">default_ldap_server</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_ldap_port</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">where_clause</span><span class="p">:</span>
+                <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">query</span><span class="p">,</span> <span class="s1">&#39;WHERE&#39;</span><span class="p">,</span> <span class="n">where_clause</span><span class="p">))</span>
+
+        <span class="n">command</span> <span class="o">=</span> <span class="n">win32com</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Dispatch</span><span class="p">(</span><span class="s2">&quot;ADODB.Command&quot;</span><span class="p">)</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">ActiveConnection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__adodb_conn</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">Properties</span><span class="p">(</span><span class="s2">&quot;Page Size&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">Value</span> <span class="o">=</span> <span class="n">page_size</span>
+        <span class="k">if</span> <span class="n">search_scope</span> <span class="o">==</span> <span class="s2">&quot;subtree&quot;</span><span class="p">:</span>
+            <span class="n">command</span><span class="o">.</span><span class="n">Properties</span><span class="p">(</span><span class="s2">&quot;Searchscope&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">Value</span> <span class="o">=</span> <span class="n">ADQuery</span><span class="o">.</span><span class="n">ADS_SCOPE_SUBTREE</span>
+        <span class="k">elif</span> <span class="n">search_scope</span> <span class="o">==</span> <span class="s2">&quot;onelevel&quot;</span><span class="p">:</span>
+            <span class="n">command</span><span class="o">.</span><span class="n">Properties</span><span class="p">(</span><span class="s2">&quot;Searchscope&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">Value</span> <span class="o">=</span> <span class="n">ADQuery</span><span class="o">.</span><span class="n">ADS_SCOPE_ONELEVEL</span>
+        <span class="k">elif</span> <span class="n">search_scope</span> <span class="o">==</span> <span class="s2">&quot;base&quot;</span><span class="p">:</span>
+            <span class="n">command</span><span class="o">.</span><span class="n">Properties</span><span class="p">(</span><span class="s2">&quot;Searchscope&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">Value</span> <span class="o">=</span> <span class="n">ADQuery</span><span class="o">.</span><span class="n">ADS_SCOPE_BASE</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown search_base </span><span class="si">%s</span><span class="s2">, must be subtree, &quot;</span>\
+                            <span class="s2">&quot;onelevel or base&quot;</span> <span class="o">%</span> <span class="n">search_scope</span><span class="p">)</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">CommandText</span> <span class="o">=</span> <span class="n">query</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rc</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">Execute</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__queried</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">row_count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rs</span><span class="o">.</span><span class="n">RecordCount</span>
+
+    <span class="k">def</span> <span class="nf">get_row_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;User the row_count property instead&quot;</span><span class="p">,</span><span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rs</span><span class="o">.</span><span class="n">RecordCount</span>
+
+<div class="viewcode-block" id="ADQuery.get_single_result"><a class="viewcode-back" href="../../objects.html#pyad.ADQuery.get_single_result">[docs]</a>    <span class="k">def</span> <span class="nf">get_single_result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get_single_result Gets the next result in the result set.</span>
+
+<span class="sd">        :raises noExecutedQuery: if called before calling execute_query()</span>
+<span class="sd">        :return: values for the query result</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__queried</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">noExecutedQuery</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">row_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rs</span><span class="o">.</span><span class="n">EOF</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__position</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__rs</span><span class="o">.</span><span class="n">MoveFirst</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__position</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rs</span><span class="o">.</span><span class="n">Fields</span><span class="p">:</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">Name</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">Value</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__position</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rs</span><span class="o">.</span><span class="n">MoveNext</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">d</span></div>
+
+    <span class="k">def</span> <span class="nf">get_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__queried</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">noExecutedQuery</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">row_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rs</span><span class="o">.</span><span class="n">EOF</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__rs</span><span class="o">.</span><span class="n">MoveFirst</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__position</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rs</span><span class="o">.</span><span class="n">EOF</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rs</span><span class="o">.</span><span class="n">Fields</span><span class="p">:</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">Name</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">Value</span>
+            <span class="k">yield</span> <span class="n">d</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__position</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__rs</span><span class="o">.</span><span class="n">MoveNext</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_all_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__queried</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">noExecutedQuery</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_results</span><span class="p">():</span>
+            <span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">l</span>
+
+    <span class="k">def</span> <span class="nf">seek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pos</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pos</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">row_count</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot seek past end of result&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rs</span><span class="o">.</span><span class="n">MoveFirst</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__position</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MoveNext</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__position</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__position</span> <span class="o">==</span> <span class="n">pos</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__position</span>
+
+    <span class="k">def</span> <span class="nf">tell</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__position</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Python Active Directory Tools 0.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyad.adquery</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Zakir Durumeric.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+<script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '4fe3a2a4613f5d2d5600005d');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+
+  </body>
+</html>

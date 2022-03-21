@@ -44,45 +44,53 @@
             
   <section id="active-directory-basics">
 <h1>Active Directory Basics<a class="headerlink" href="#active-directory-basics" title="Permalink to this headline">¶</a></h1>
-<p>Pyad is designed to expose the ADSI interface to Microsoft Active Directory in a straight-forward Pythonic manner. The library is designed to run on Windows. This page describes the basics of how to use the library. It does not, however, comprehensively describe the functionality of the library, which is more aptly documented in the next section.</p>
+<p>Pyad is designed to expose the ADSI interface to Microsoft Active Directory in a straight-forward
+Pythonic manner. The library is designed to run on Windows. This page describes the basics of
+how to use the library. It does not, however, comprehensively describe the functionality of
+the library, which is more aptly documented in the next section.</p>
 <section id="connecting-to-active-directory">
 <h2>Connecting to Active Directory<a class="headerlink" href="#connecting-to-active-directory" title="Permalink to this headline">¶</a></h2>
-<p>By default, pyad will connect to the Active Directory domain to which the machine is joined (rootDSE):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyad</span> <span class="kn">import</span> <span class="n">aduser</span>
-<span class="n">user</span> <span class="o">=</span> <span class="n">aduser</span><span class="o">.</span><span class="n">ADUser</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;myuser&quot;</span><span class="p">)</span>
+<p>By default, pyad will connect to the Active Directory domain to which the machine is joined
+(rootDSE):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyad</span> <span class="kn">import</span> <span class="n">ADUser</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">ADUser</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;myuser&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>However, it is possible to connect to a specific domain controller or to use alternate credentials, by calling pyad.set_defaults() or by passing in connection information in the options dictionary for each object you connect to. Authentication is performed over a secured connection, pyad will not pass credentials over clear text. The following options can be set in the <cite>set_defaults</cite> call: <cite>ldap_server</cite>, <cite>gc_server</cite>, <cite>ldap_port</cite>, <cite>gc_port</cite>, <cite>username</cite>, <cite>password</cite>, and <cite>ssl</cite> (True/False). For example, the following code will set the default connection parameters for all objects accessed through pyad:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyad</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">pyad</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">ldap_server</span><span class="o">=</span><span class="s2">&quot;dc1.domain.com&quot;</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="s2">&quot;service_account&quot;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s2">&quot;mypassword&quot;</span><span class="p">)</span>
-<span class="n">user</span> <span class="o">=</span> <span class="n">pyad</span><span class="o">.</span><span class="n">aduser</span><span class="o">.</span><span class="n">ADUser</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;myuser&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>It is also possible to pass in options when connecting to a specific object. This will not set the library defaults, but these settings will be used from any objects you derive from it (e.g. if you request group membership of a user) Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyad</span> <span class="kn">import</span> <span class="n">aduser</span>
-<span class="n">user</span> <span class="o">=</span> <span class="n">aduser</span><span class="o">.</span><span class="n">ADUser</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;myuser&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">ldap_server</span><span class="o">=</span><span class="s2">&quot;dc1.domain.com&quot;</span><span class="p">))</span>
+<p>It is also possible to pass in options when connecting to a specific object. This will not
+set the library defaults, but these settings will be used from any objects you derive from
+it (e.g. if you request group membership of a user) Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyad</span> <span class="kn">import</span> <span class="n">ADUser</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">ADUser</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;myuser&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="n">ldap_server</span><span class="o">=</span><span class="s2">&quot;dc1.domain.com&quot;</span><span class="p">})</span>
 </pre></div>
 </div>
 </section>
 <section id="basic-object-manipulation">
 <h2>Basic Object Manipulation<a class="headerlink" href="#basic-object-manipulation" title="Permalink to this headline">¶</a></h2>
-<p>There are first order Python classes for different types of objects in Active Directory. For example, ADUser represents user objects and ADGroup represents groups. All objects subclass ADObject. Most methods are defined in ADObject, but subclasses generally provide additional helper methods (e.g. ADUser has <cite>set_password</cite> and ADGroup has <cite>add_member</cite>).</p>
-<p>It is possible to connect to an object by distinguished name, CN, UPN, and GUID if you already know the type of object. Examples:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyad</span> <span class="kn">import</span> <span class="n">aduser</span>
-<span class="n">user1</span> <span class="o">=</span> <span class="n">aduser</span><span class="o">.</span><span class="n">ADUser</span><span class="o">.</span><span class="n">from_dn</span><span class="p">(</span><span class="s2">&quot;cn=myuser, ou=staff, dc=domain, dc=com&quot;</span><span class="p">)</span>
-<span class="n">user2</span> <span class="o">=</span> <span class="n">aduser</span><span class="o">.</span><span class="n">ADUser</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;myuser&quot;</span><span class="p">)</span>
-<span class="n">user3</span> <span class="o">=</span> <span class="n">aduser</span><span class="o">.</span><span class="n">ADUser</span><span class="o">.</span><span class="n">from_guid</span><span class="p">(</span><span class="s2">&quot;XXX-XXX-XXX&quot;</span><span class="p">)</span>
+<p>There are first order Python classes for different types of objects in Active Directory. For
+example, ADUser represents user objects and ADGroup represents groups. All objects subclass
+ADObject. Most methods are defined in ADObject, but subclasses generally provide additional
+helper methods (e.g. ADUser has <cite>set_password</cite> and ADGroup has <cite>add_member</cite>).</p>
+<p>It is possible to connect to an object by distinguished name, CN, UPN, and GUID if you already
+know the type of object. Examples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyad</span> <span class="kn">import</span> <span class="n">ADUser</span>
+<span class="n">user1</span> <span class="o">=</span> <span class="n">ADUser</span><span class="o">.</span><span class="n">from_dn</span><span class="p">(</span><span class="s2">&quot;cn=myuser, ou=staff, dc=domain, dc=com&quot;</span><span class="p">)</span>
+<span class="n">user2</span> <span class="o">=</span> <span class="n">ADUser</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;myuser&quot;</span><span class="p">)</span>
+<span class="n">user3</span> <span class="o">=</span> <span class="n">ADUser</span><span class="o">.</span><span class="n">from_guid</span><span class="p">(</span><span class="s2">&quot;XXX-XXX-XXX&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>It is also possible to use the pyad factory with an arbitrary Active Directory object and to receive an appropriately classed Python object:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyad</span> <span class="kn">import</span> <span class="n">pyad</span>
+<p>It is also possible to use the pyad factory with an arbitrary Active Directory object and
+to receive an appropriately classed Python object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyad</span>
 <span class="n">user</span> <span class="o">=</span> <span class="n">pyad</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;user1&quot;</span><span class="p">)</span>
 <span class="n">computer</span> <span class="o">=</span> <span class="n">pyad</span><span class="o">.</span><span class="n">from_dn</span><span class="p">(</span><span class="s2">&quot;cn=WS1,ou=Workstations,dc=domain,dc=com&quot;</span><span class="p">)</span>
 <span class="n">group</span> <span class="o">=</span> <span class="n">pyad</span><span class="o">.</span><span class="n">from_guid</span><span class="p">(</span><span class="s2">&quot;XXX-XXX-XXX&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Unlike the ADSI interface, pyad objects are intended to interact with one another. Instead of adding the DN of a user to the members attribute of a group to add the user, you instead add the user object to the group. For instance:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">user1</span> <span class="o">=</span> <span class="n">ADUser</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;myuser1&quot;</span><span class="p">)</span>
+<p>Unlike the ADSI interface, pyad objects are intended to interact with
+one another. Instead of adding the DN of a user to the members attribute
+of a group to add the user, you instead add the user object to the group.
+For instance:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">user1</span> <span class="o">=</span> <span class="n">ADUser</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;myuser1&quot;</span><span class="p">)</span>
 <span class="n">user2</span> <span class="o">=</span> <span class="n">ADUser</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;myuser2&quot;</span><span class="p">)</span>
 <span class="n">group</span> <span class="o">=</span> <span class="n">ADGroup</span><span class="o">.</span><span class="n">from_dn</span><span class="p">(</span><span class="s2">&quot;staff&quot;</span><span class="p">)</span>
 
@@ -92,8 +100,9 @@
     <span class="nb">print</span> <span class="n">user1</span><span class="o">.</span><span class="n">description</span>
 </pre></div>
 </div>
-<p>However, it is still possible to directly manipulate any attribute outside of the helper methods that pyad provides:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">user1</span> <span class="o">=</span> <span class="n">ADUser</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;myuser1&quot;</span><span class="p">)</span>
+<p>However, it is still possible to directly manipulate any attribute outside of the helper
+methods that pyad provides:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">user1</span> <span class="o">=</span> <span class="n">ADUser</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;myuser1&quot;</span><span class="p">)</span>
 <span class="n">user</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;new description&quot;</span><span class="p">)</span>
 <span class="n">user</span><span class="o">.</span><span class="n">append_to_attribute</span><span class="p">(</span><span class="s2">&quot;member&quot;</span><span class="p">,</span> <span class="s2">&quot;cn=myuser1, ou=staff, dc=domain, dc=com&quot;</span><span class="p">)</span>
 </pre></div>
@@ -102,8 +111,10 @@
 </section>
 <section id="creating-moving-and-deleting-objects">
 <h2>Creating, Moving, and Deleting Objects<a class="headerlink" href="#creating-moving-and-deleting-objects" title="Permalink to this headline">¶</a></h2>
-<p>There are two methodologies for creating and deleting objects. In both cases, you must first bind to the parent container. When creating a new object, several attributes are required, but other additional attributes can be specified with the <cite>optional_attributes</cite> parameter. Example 1:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ou</span> <span class="o">=</span> <span class="n">ADContainer</span><span class="o">.</span><span class="n">from_dn</span><span class="p">(</span><span class="s2">&quot;ou=workstations, dc=domain, dc=com&quot;</span><span class="p">)</span>
+<p>There are two methodologies for creating and deleting objects. In both cases, you must first
+bind to the parent container. When creating a new object, several attributes are required, but
+other additional attributes can be specified with the <cite>optional_attributes</cite> parameter.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ou</span> <span class="o">=</span> <span class="n">ADContainer</span><span class="o">.</span><span class="n">from_dn</span><span class="p">(</span><span class="s2">&quot;ou=workstations, dc=domain, dc=com&quot;</span><span class="p">)</span>
 
 <span class="c1"># create a new group without any optional attributes</span>
 <span class="n">new_computer</span> <span class="o">=</span> <span class="n">ADComputer</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;WS-489&quot;</span><span class="p">,</span> <span class="n">ou</span><span class="p">)</span>
@@ -113,31 +124,35 @@
                 <span class="n">optional_attributes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span><span class="s2">&quot;all IT staff in our company&quot;</span><span class="p">})</span>
 </pre></div>
 </div>
-<p>It is also possible to create new objects from the parent container:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ou</span> <span class="o">=</span> <span class="n">ADContainer</span><span class="o">.</span><span class="n">from_dn</span><span class="p">(</span><span class="s2">&quot;ou=workstations, dc=domain, dc=com&quot;</span><span class="p">)</span>
+<p>It is also possible to create new objects from the parent container</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ou</span> <span class="o">=</span> <span class="n">ADContainer</span><span class="o">.</span><span class="n">from_dn</span><span class="p">(</span><span class="s2">&quot;ou=workstations, dc=domain, dc=com&quot;</span><span class="p">)</span>
 <span class="n">computer</span> <span class="o">=</span> <span class="n">ou</span><span class="o">.</span><span class="n">create_computer</span><span class="p">(</span><span class="s2">&quot;WS-490&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Once objects are created, they can be moved:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">computer</span> <span class="o">=</span> <span class="n">ADComputer</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;WS-500&quot;</span><span class="p">)</span>
+<p>Once objects are created, they can be moved</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">computer</span> <span class="o">=</span> <span class="n">ADComputer</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;WS-500&quot;</span><span class="p">)</span>
 <span class="n">computer</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">ADContainer</span><span class="o">.</span><span class="n">from_dn</span><span class="p">(</span><span class="s2">&quot;ou=workstations, ou=HR, dc=company, dc=com&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>or renamed:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">computer</span> <span class="o">=</span> <span class="n">ADComputer</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;WS-500&quot;</span><span class="p">)</span>
+<p>or renamed</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">computer</span> <span class="o">=</span> <span class="n">ADComputer</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;WS-500&quot;</span><span class="p">)</span>
 <span class="n">computer</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;WS-501&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Objects can be removed by calling delete():</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ADComputer</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;WS-500&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+<p>or deleted</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ADComputer</span><span class="o">.</span><span class="n">from_cn</span><span class="p">(</span><span class="s2">&quot;WS-500&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
 <section id="searching-active-directory">
 <h2>Searching Active Directory<a class="headerlink" href="#searching-active-directory" title="Permalink to this headline">¶</a></h2>
-<p>As shown above, objects can be directly connected to via CN, DN, GUID, or UPN. However, objects can also be searched for through the ADQuery interface (and in the background, this is how objects are actually found when you connect by CN). It is important to note that the ADQuery interface will not provide you with pyad objects, but instead with only the attributes for which you queried, for performance reasons. Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyad.adquery</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">pyad</span><span class="o">.</span><span class="n">adquery</span><span class="o">.</span><span class="n">ADQuery</span><span class="p">()</span>
+<p>As shown above, objects can be directly connected to via CN, DN, GUID, or UPN. However,
+objects can also be searched for through the ADQuery interface (and in the background, this
+is how objects are actually found when you connect by CN). It is important to note that the
+ADQuery interface will not provide you with pyad objects, but instead with only the attributes
+for which you queried, for performance reasons.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyad</span> <span class="kn">import</span> <span class="n">ADQuery</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">ADQuery</span><span class="p">()</span>
 
 <span class="n">q</span><span class="o">.</span><span class="n">execute_query</span><span class="p">(</span>
     <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;distinguishedName&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">],</span>
@@ -149,11 +164,11 @@
     <span class="nb">print</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;distinguishedName&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>When you search an AD Forest for users you will likely want to search on “CN”, you can simulate a SQL ‘LIKE’ where clause with the AD wildcard character ‘*’. E.g. cn=’*john*’.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyad.adquery</span> <span class="k">as</span> <span class="nn">adquery</span>
-<span class="kn">import</span> <span class="nn">pprint</span>
+<p>When you search an AD Forest for users you will likely want to search on “CN”, you can simulate
+a SQL ‘LIKE’ where clause with the AD wildcard character ‘*’. E.g. cn=’*john*’.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyad</span> <span class="kn">import</span> <span class="n">ADQuery</span>
 
-<span class="n">q</span> <span class="o">=</span> <span class="n">adquery</span><span class="o">.</span><span class="n">ADQuery</span><span class="p">()</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">ADQuery</span><span class="p">()</span>
 
 <span class="n">q</span><span class="o">.</span><span class="n">execute_query</span><span class="p">(</span>
     <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;distinguishedName&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;cn&quot;</span><span class="p">],</span>
@@ -161,7 +176,7 @@
 <span class="p">)</span>
 
 <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">q</span><span class="o">.</span><span class="n">get_results</span><span class="p">():</span>
-    <span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span> <span class="n">row</span> <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span> <span class="n">row</span> <span class="p">)</span>
 </pre></div>
 </div>
 </section>

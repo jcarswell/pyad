@@ -7,8 +7,6 @@ Python Active Directory Tools's Documentation
 =============================================
 
 .. toctree::
-   :name: Contents
-   :caption: Contents
 
    pyad
    objects

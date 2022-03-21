@@ -1,7 +1,8 @@
 Manipulating Active Directory Objects
 =====================================
 
-This page contains detailed information about how to manipulate various types of Active Directory objects. Keep in mind that all objects subclass ADObject.
+This page contains detailed information about how to manipulate various types of Active 
+Directory objects. Keep in mind that all objects subclass ADObject.
 
 ADObject
 ---------
@@ -9,35 +10,41 @@ ADObject
 .. autoclass:: pyad.adobject.ADObject
    :members:
 
-
 ADUser
-----------------
+------
 
-.. autoclass:: pyad.aduser.ADUser
+.. autoclass:: pyad.ADUser
    :members:
 
 ADComputer
--------------
+----------
 
-.. autoclass:: pyad.adcomputer.ADComputer
+.. autoclass:: pyad.ADComputer
    :members:
 
 ADGroup
 -------
 
-.. autoclass:: pyad.adgroup.ADGroup
+.. autoclass:: pyad.ADGroup
    :members:
 
 ADContainer
-------------------
+-----------
 
-.. autoclass:: pyad.adcontainer.ADContainer
+.. autoclass:: pyad.ADContainer
    :members:
-   
+
+ADQuery
+-------
+
+.. autoclass:: pyad.ADQuery
+   :members:
+   :undoc-members:
+
 ADDomain
 --------
 
 NOTE: ADDomain subclasses ADContainer.
 
-.. autoclass:: pyad.addomain.ADDomain
+.. autoclass:: pyad.ADDomain
    :members:

@@ -40,7 +40,8 @@
             
   <section id="manipulating-active-directory-objects">
 <h1>Manipulating Active Directory Objects<a class="headerlink" href="#manipulating-active-directory-objects" title="Permalink to this headline">¶</a></h1>
-<p>This page contains detailed information about how to manipulate various types of Active Directory objects. Keep in mind that all objects subclass ADObject.</p>
+<p>This page contains detailed information about how to manipulate various types of Active
+Directory objects. Keep in mind that all objects subclass ADObject.</p>
 <section id="adobject">
 <h2>ADObject<a class="headerlink" href="#adobject" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
@@ -281,7 +282,7 @@ Further information on these values can be found at
 <p>new_ou_object expects a ADContainer object where the current object will be moved to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>new_ou_object</strong> (<a class="reference internal" href="#pyad.adcontainer.ADContainer" title="pyad.adcontainer.ADContainer"><em>ADContainer</em></a>) – The destination ADContainer to move the object to</p>
+<dd class="field-odd"><p><strong>new_ou_object</strong> (<a class="reference internal" href="#pyad.ADContainer" title="pyad.ADContainer"><em>ADContainer</em></a>) – The destination ADContainer to move the object to</p>
 </dd>
 </dl>
 </dd></dl>
@@ -382,74 +383,74 @@ attribute_value_dict should contain a dictionary of values keyed by attribute na
 <section id="aduser">
 <h2>ADUser<a class="headerlink" href="#aduser" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="pyad.aduser.ADUser">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.aduser.</span></span><span class="sig-name descname"><span class="pre">ADUser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distinguished_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adsi_ldap_com_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.aduser.ADUser" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADUser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.</span></span><span class="sig-name descname"><span class="pre">ADUser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distinguished_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adsi_ldap_com_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADUser" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
-<dt class="sig sig-object py" id="pyad.aduser.ADUser.clear_managedby">
-<span class="sig-name descname"><span class="pre">clear_managedby</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flush</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.clear_managedby"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.aduser.ADUser.clear_managedby" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADUser.clear_managedby">
+<span class="sig-name descname"><span class="pre">clear_managedby</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flush</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.clear_managedby"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADUser.clear_managedby" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets object to be managedBy nobody</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.aduser.ADUser.create">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upn_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.aduser.ADUser.create" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADUser.create">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upn_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADUser.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates and returns a new active directory user</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.aduser.ADUser.force_pwd_change_on_login">
-<span class="sig-name descname"><span class="pre">force_pwd_change_on_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flush</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.force_pwd_change_on_login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.aduser.ADUser.force_pwd_change_on_login" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADUser.force_pwd_change_on_login">
+<span class="sig-name descname"><span class="pre">force_pwd_change_on_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flush</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.force_pwd_change_on_login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADUser.force_pwd_change_on_login" title="Permalink to this definition">¶</a></dt>
 <dd><p>Forces the user to change their password the next time they login</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.aduser.ADUser.get_expiration">
-<span class="sig-name descname"><span class="pre">get_expiration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.get_expiration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.aduser.ADUser.get_expiration" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADUser.get_expiration">
+<span class="sig-name descname"><span class="pre">get_expiration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.get_expiration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADUser.get_expiration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the expiration date of the password as a datetime object.
 The _ldap_adsi_obj.AccountExpirationDate can be inaccurate and
 return the UNIX Epoch instead of the true expiration date.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.aduser.ADUser.get_max_pwd_age">
-<span class="sig-name descname"><span class="pre">get_max_pwd_age</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.get_max_pwd_age"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.aduser.ADUser.get_max_pwd_age" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADUser.get_max_pwd_age">
+<span class="sig-name descname"><span class="pre">get_max_pwd_age</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.get_max_pwd_age"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADUser.get_max_pwd_age" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns timespan object representing the max password age on a user’s domain</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.aduser.ADUser.get_password_expired">
-<span class="sig-name descname"><span class="pre">get_password_expired</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.get_password_expired"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.aduser.ADUser.get_password_expired" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADUser.get_password_expired">
+<span class="sig-name descname"><span class="pre">get_password_expired</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.get_password_expired"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADUser.get_password_expired" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a bool representing whether the password has expired.
 The passwordexpired property will often return True even if not expired.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.aduser.ADUser.get_password_last_set">
-<span class="sig-name descname"><span class="pre">get_password_last_set</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">datetime.datetime</span></span></span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.get_password_last_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.aduser.ADUser.get_password_last_set" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADUser.get_password_last_set">
+<span class="sig-name descname"><span class="pre">get_password_last_set</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">datetime.datetime</span></span></span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.get_password_last_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADUser.get_password_last_set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns datetime object of when user last reset their password.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.aduser.ADUser.set_expiration">
-<span class="sig-name descname"><span class="pre">set_expiration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flush</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.set_expiration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.aduser.ADUser.set_expiration" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADUser.set_expiration">
+<span class="sig-name descname"><span class="pre">set_expiration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flush</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.set_expiration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADUser.set_expiration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the expiration date of the password to the given value</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.aduser.ADUser.set_managedby">
-<span class="sig-name descname"><span class="pre">set_managedby</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flush</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.set_managedby"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.aduser.ADUser.set_managedby" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADUser.set_managedby">
+<span class="sig-name descname"><span class="pre">set_managedby</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flush</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.set_managedby"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADUser.set_managedby" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets managedBy on object to the specified user</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.aduser.ADUser.set_password">
-<span class="sig-name descname"><span class="pre">set_password</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flush</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.set_password"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.aduser.ADUser.set_password" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADUser.set_password">
+<span class="sig-name descname"><span class="pre">set_password</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flush</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.set_password"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADUser.set_password" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the users password</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.aduser.ADUser.unlock">
-<span class="sig-name descname"><span class="pre">unlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flush</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.unlock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.aduser.ADUser.unlock" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADUser.unlock">
+<span class="sig-name descname"><span class="pre">unlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flush</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyad/aduser.html#ADUser.unlock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADUser.unlock" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unlock the user’s account</p>
 </dd></dl>
 
@@ -459,18 +460,18 @@ The passwordexpired property will often return True even if not expired.</p>
 <section id="adcomputer">
 <h2>ADComputer<a class="headerlink" href="#adcomputer" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="pyad.adcomputer.ADComputer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.adcomputer.</span></span><span class="sig-name descname"><span class="pre">ADComputer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distinguished_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adsi_ldap_com_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcomputer.html#ADComputer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcomputer.ADComputer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADComputer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.</span></span><span class="sig-name descname"><span class="pre">ADComputer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distinguished_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adsi_ldap_com_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcomputer.html#ADComputer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADComputer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Python class representing a computer object in Active Directory.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adcomputer.ADComputer.create">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcomputer.html#ADComputer.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcomputer.ADComputer.create" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADComputer.create">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcomputer.html#ADComputer.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADComputer.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates and returns a new computer object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adcomputer.ADComputer.get_creator">
-<span class="sig-name descname"><span class="pre">get_creator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcomputer.html#ADComputer.get_creator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcomputer.ADComputer.get_creator" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADComputer.get_creator">
+<span class="sig-name descname"><span class="pre">get_creator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcomputer.html#ADComputer.get_creator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADComputer.get_creator" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns ADUser object of the user who added the computer to the domain. Returns None if user no longer exists.</p>
 </dd></dl>
 
@@ -480,75 +481,75 @@ The passwordexpired property will often return True even if not expired.</p>
 <section id="adgroup">
 <h2>ADGroup<a class="headerlink" href="#adgroup" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="pyad.adgroup.ADGroup">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.adgroup.</span></span><span class="sig-name descname"><span class="pre">ADGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distinguished_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adsi_ldap_com_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adgroup.ADGroup" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADGroup">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.</span></span><span class="sig-name descname"><span class="pre">ADGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distinguished_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adsi_ldap_com_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADGroup" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
-<dt class="sig sig-object py" id="pyad.adgroup.ADGroup.add_members">
-<span class="sig-name descname"><span class="pre">add_members</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">members</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.add_members"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adgroup.ADGroup.add_members" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADGroup.add_members">
+<span class="sig-name descname"><span class="pre">add_members</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">members</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.add_members"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADGroup.add_members" title="Permalink to this definition">¶</a></dt>
 <dd><p>Accepts a list of pyAD objects or a single pyAD object and adds as members to the group.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adgroup.ADGroup.check_contains_member">
-<span class="sig-name descname"><span class="pre">check_contains_member</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">check_member</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.check_contains_member"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adgroup.ADGroup.check_contains_member" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADGroup.check_contains_member">
+<span class="sig-name descname"><span class="pre">check_contains_member</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">check_member</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.check_contains_member"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADGroup.check_contains_member" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks whether a pyAD object is a member of the group.
 check_member expects a pyAD object to be checked.
 recursive expects True/False which determines whether the group membership will be searched recursively.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adgroup.ADGroup.create">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_enabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'GLOBAL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adgroup.ADGroup.create" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADGroup.create">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_enabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'GLOBAL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADGroup.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates and returns a new group</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adgroup.ADGroup.get_group_scope">
-<span class="sig-name descname"><span class="pre">get_group_scope</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.get_group_scope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adgroup.ADGroup.get_group_scope" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADGroup.get_group_scope">
+<span class="sig-name descname"><span class="pre">get_group_scope</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.get_group_scope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADGroup.get_group_scope" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the group scope GLOBAL, UNIVERSAL, or LOCAL.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adgroup.ADGroup.get_group_type">
-<span class="sig-name descname"><span class="pre">get_group_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.get_group_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adgroup.ADGroup.get_group_type" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADGroup.get_group_type">
+<span class="sig-name descname"><span class="pre">get_group_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.get_group_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADGroup.get_group_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns group type DISTRIBUTION or SECURITY.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adgroup.ADGroup.get_members">
-<span class="sig-name descname"><span class="pre">get_members</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignoreGroups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.get_members"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adgroup.ADGroup.get_members" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADGroup.get_members">
+<span class="sig-name descname"><span class="pre">get_members</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignoreGroups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.get_members"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADGroup.get_members" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of group members.
 recursive - True/False. Determines whether to recursively traverse through nested groups.
 ignoreGroups - True/False. Determines whether or not to return an ADGroup objects in list or to ignore them.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adgroup.ADGroup.remove_all_members">
-<span class="sig-name descname"><span class="pre">remove_all_members</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.remove_all_members"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adgroup.ADGroup.remove_all_members" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADGroup.remove_all_members">
+<span class="sig-name descname"><span class="pre">remove_all_members</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.remove_all_members"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADGroup.remove_all_members" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes all members of the group.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adgroup.ADGroup.remove_members">
-<span class="sig-name descname"><span class="pre">remove_members</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">members</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.remove_members"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adgroup.ADGroup.remove_members" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADGroup.remove_members">
+<span class="sig-name descname"><span class="pre">remove_members</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">members</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.remove_members"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADGroup.remove_members" title="Permalink to this definition">¶</a></dt>
 <dd><p>Accepts a list of pyAD objects or a single pyAD object and removes these as members from the group.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adgroup.ADGroup.set_group_scope">
-<span class="sig-name descname"><span class="pre">set_group_scope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_scope</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.set_group_scope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adgroup.ADGroup.set_group_scope" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADGroup.set_group_scope">
+<span class="sig-name descname"><span class="pre">set_group_scope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_scope</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.set_group_scope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADGroup.set_group_scope" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets group scope. new_scope expects GLOBAL, UNIVERSAL, or LOCAL.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adgroup.ADGroup.set_group_type">
-<span class="sig-name descname"><span class="pre">set_group_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.set_group_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adgroup.ADGroup.set_group_type" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADGroup.set_group_type">
+<span class="sig-name descname"><span class="pre">set_group_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.set_group_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADGroup.set_group_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets group type. new_type expects DISTRIBUTION or SECURITY.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adgroup.ADGroup.sync_membership">
-<span class="sig-name descname"><span class="pre">sync_membership</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_population</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.sync_membership"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adgroup.ADGroup.sync_membership" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADGroup.sync_membership">
+<span class="sig-name descname"><span class="pre">sync_membership</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_population</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adgroup.html#ADGroup.sync_membership"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADGroup.sync_membership" title="Permalink to this definition">¶</a></dt>
 <dd><p>Synchronizes membership of group so that it matches the list of entries in new_population</p>
 </dd></dl>
 
@@ -558,43 +559,133 @@ ignoreGroups - True/False. Determines whether or not to return an ADGroup object
 <section id="adcontainer">
 <h2>ADContainer<a class="headerlink" href="#adcontainer" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="pyad.adcontainer.ADContainer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.adcontainer.</span></span><span class="sig-name descname"><span class="pre">ADContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distinguished_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adsi_ldap_com_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADContainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.</span></span><span class="sig-name descname"><span class="pre">ADContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distinguished_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adsi_ldap_com_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADContainer" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
-<dt class="sig sig-object py" id="pyad.adcontainer.ADContainer.create_computer">
-<span class="sig-name descname"><span class="pre">create_computer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_computer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.create_computer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADContainer.create_computer">
+<span class="sig-name descname"><span class="pre">create_computer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_computer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADContainer.create_computer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new computer object in the container</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adcontainer.ADContainer.create_container">
-<span class="sig-name descname"><span class="pre">create_container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_container"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.create_container" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADContainer.create_container">
+<span class="sig-name descname"><span class="pre">create_container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_container"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADContainer.create_container" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new organizational unit in the container</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adcontainer.ADContainer.create_group">
-<span class="sig-name descname"><span class="pre">create_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_enabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'GLOBAL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.create_group" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADContainer.create_group">
+<span class="sig-name descname"><span class="pre">create_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_enabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'GLOBAL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADContainer.create_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new group object in the container</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adcontainer.ADContainer.create_user">
-<span class="sig-name descname"><span class="pre">create_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upn_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.create_user" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADContainer.create_user">
+<span class="sig-name descname"><span class="pre">create_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upn_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADContainer.create_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new user object in the container</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adcontainer.ADContainer.get_children">
-<span class="sig-name descname"><span class="pre">get_children</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.get_children"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.get_children" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADContainer.get_children">
+<span class="sig-name descname"><span class="pre">get_children</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.get_children"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADContainer.get_children" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over the children objects in the container.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyad.adcontainer.ADContainer.remove_child">
-<span class="sig-name descname"><span class="pre">remove_child</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">child</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.remove_child"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.remove_child" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADContainer.remove_child">
+<span class="sig-name descname"><span class="pre">remove_child</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">child</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.remove_child"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADContainer.remove_child" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rremoves the child object from the domain</p>
 </dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="adquery">
+<h2>ADQuery<a class="headerlink" href="#adquery" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyad.ADQuery">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.</span></span><span class="sig-name descname"><span class="pre">ADQuery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adquery.html#ADQuery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADQuery" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="pyad.ADQuery.ADS_SCOPE_BASE">
+<span class="sig-name descname"><span class="pre">ADS_SCOPE_BASE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pyad.ADQuery.ADS_SCOPE_BASE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyad.ADQuery.ADS_SCOPE_ONELEVEL">
+<span class="sig-name descname"><span class="pre">ADS_SCOPE_ONELEVEL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pyad.ADQuery.ADS_SCOPE_ONELEVEL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyad.ADQuery.ADS_SCOPE_SUBTREE">
+<span class="sig-name descname"><span class="pre">ADS_SCOPE_SUBTREE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pyad.ADQuery.ADS_SCOPE_SUBTREE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyad.ADQuery.ADS_SECURE_AUTHENTICATION">
+<span class="sig-name descname"><span class="pre">ADS_SECURE_AUTHENTICATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pyad.ADQuery.ADS_SECURE_AUTHENTICATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyad.ADQuery.ADS_USE_ENCRYPTION">
+<span class="sig-name descname"><span class="pre">ADS_USE_ENCRYPTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pyad.ADQuery.ADS_USE_ENCRYPTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyad.ADQuery.execute_query">
+<span class="sig-name descname"><span class="pre">execute_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['distinguishedName']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where_clause</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'LDAP'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_dn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'subtree'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldap_dialect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyad/adquery.html#ADQuery.execute_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADQuery.execute_query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyad.ADQuery.get_all_results">
+<span class="sig-name descname"><span class="pre">get_all_results</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/pyad/adquery.html#ADQuery.get_all_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADQuery.get_all_results" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyad.ADQuery.get_results">
+<span class="sig-name descname"><span class="pre">get_results</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/pyad/adquery.html#ADQuery.get_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADQuery.get_results" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyad.ADQuery.get_row_count">
+<span class="sig-name descname"><span class="pre">get_row_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adquery.html#ADQuery.get_row_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADQuery.get_row_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyad.ADQuery.get_single_result">
+<span class="sig-name descname"><span class="pre">get_single_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/pyad/adquery.html#ADQuery.get_single_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADQuery.get_single_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>get_single_result Gets the next result in the result set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>noExecutedQuery</strong> – if called before calling execute_query()</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>values for the query result</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyad.ADQuery.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyad/adquery.html#ADQuery.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADQuery.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyad.ADQuery.row_count">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">row_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pyad.ADQuery.row_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyad.ADQuery.seek">
+<span class="sig-name descname"><span class="pre">seek</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyad/adquery.html#ADQuery.seek"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADQuery.seek" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyad.ADQuery.tell">
+<span class="sig-name descname"><span class="pre">tell</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyad/adquery.html#ADQuery.tell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADQuery.tell" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -603,11 +694,11 @@ ignoreGroups - True/False. Determines whether or not to return an ADGroup object
 <h2>ADDomain<a class="headerlink" href="#addomain" title="Permalink to this headline">¶</a></h2>
 <p>NOTE: ADDomain subclasses ADContainer.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="pyad.addomain.ADDomain">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.addomain.</span></span><span class="sig-name descname"><span class="pre">ADDomain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distinguished_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adsi_ldap_com_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/addomain.html#ADDomain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.addomain.ADDomain" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADDomain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.</span></span><span class="sig-name descname"><span class="pre">ADDomain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distinguished_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adsi_ldap_com_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/addomain.html#ADDomain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADDomain" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
-<dt class="sig sig-object py" id="pyad.addomain.ADDomain.get_default_upn">
-<span class="sig-name descname"><span class="pre">get_default_upn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/addomain.html#ADDomain.get_default_upn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.addomain.ADDomain.get_default_upn" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyad.ADDomain.get_default_upn">
+<span class="sig-name descname"><span class="pre">get_default_upn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/addomain.html#ADDomain.get_default_upn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.ADDomain.get_default_upn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the default userPrincipalName for the domain.</p>
 </dd></dl>
 
@@ -632,6 +723,7 @@ ignoreGroups - True/False. Determines whether or not to return an ADGroup object
 <li><a class="reference internal" href="#adcomputer">ADComputer</a></li>
 <li><a class="reference internal" href="#adgroup">ADGroup</a></li>
 <li><a class="reference internal" href="#adcontainer">ADContainer</a></li>
+<li><a class="reference internal" href="#adquery">ADQuery</a></li>
 <li><a class="reference internal" href="#addomain">ADDomain</a></li>
 </ul>
 </li>
