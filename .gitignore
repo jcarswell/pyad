@@ -355,6 +355,7 @@ var/
 .installed.cfg
 *.egg
 test_localsystem.txt
+dist/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
