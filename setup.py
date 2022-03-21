@@ -9,7 +9,7 @@ def read(fname):
         return ''
 
 setup(
-    name = "python-ad",
+    name = "python-win-ad",
     version = "0.6.0",
     author = "Zakir Durumeric",
     author_email = "zakird@gmail.com",
