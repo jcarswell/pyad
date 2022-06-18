@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyad.aduser &#8212; Python Active Directory Tools 0.6 documentation</title>
+    <title>pyad.aduser &#8212; Python Active Directory Tools 0.6.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
     
@@ -23,7 +23,10 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Python Active Directory Tools 0.6 documentation</a> &#187;</li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Python Active Directory Tools 0.6.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyad.aduser</a></li> 
       </ul>
@@ -40,18 +43,25 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">pyadutils</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
+
 <div class="viewcode-block" id="ADUser"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser">[docs]</a><span class="k">class</span> <span class="nc">ADUser</span><span class="p">(</span><span class="n">ADObject</span><span class="p">):</span>
-    
 <div class="viewcode-block" id="ADUser.create"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.create">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">container_object</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">upn_suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">enable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional_attributes</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">,</span>
+        <span class="n">container_object</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">upn_suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">enable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">optional_attributes</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creates and returns a new active directory user&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">container_object</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
             <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
             <span class="n">upn_suffix</span><span class="o">=</span><span class="n">upn_suffix</span><span class="p">,</span>
             <span class="n">enable</span><span class="o">=</span><span class="n">enable</span><span class="p">,</span>
-            <span class="n">optional_attributes</span><span class="o">=</span><span class="n">optional_attributes</span>
+            <span class="n">optional_attributes</span><span class="o">=</span><span class="n">optional_attributes</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ADUser.set_password"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.set_password">[docs]</a>    <span class="k">def</span> <span class="nf">set_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -60,44 +70,51 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_ldap_adsi_obj</span><span class="o">.</span><span class="n">SetPassword</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">flush</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_flush</span><span class="p">()</span>
-        <span class="k">except</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">com_error</span> <span class="k">as</span> <span class="n">excpt</span><span class="p">:</span> 
+        <span class="k">except</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">com_error</span> <span class="k">as</span> <span class="n">excpt</span><span class="p">:</span>
             <span class="n">pyadutils</span><span class="o">.</span><span class="n">pass_up_com_exception</span><span class="p">(</span><span class="n">excpt</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ADUser.force_pwd_change_on_login"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.force_pwd_change_on_login">[docs]</a>    <span class="k">def</span> <span class="nf">force_pwd_change_on_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">flush</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span><span class="kc">True</span><span class="p">):</span> 
+<div class="viewcode-block" id="ADUser.force_pwd_change_on_login"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.force_pwd_change_on_login">[docs]</a>    <span class="k">def</span> <span class="nf">force_pwd_change_on_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flush</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Forces the user to change their password the next time they login&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update_attribute</span><span class="p">(</span><span class="s1">&#39;PwdLastSet&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">no_flush</span><span class="o">=</span><span class="p">(</span><span class="ow">not</span> <span class="n">flush</span><span class="p">))</span></div>
-    
-    <span class="k">def</span> <span class="nf">grant_password_lease</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">flush</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update_attribute</span><span class="p">(</span><span class="s1">&#39;PwdLastSet&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">no_flush</span><span class="o">=</span><span class="p">(</span><span class="ow">not</span> <span class="n">flush</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_attribute</span><span class="p">(</span><span class="s2">&quot;PwdLastSet&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">no_flush</span><span class="o">=</span><span class="p">(</span><span class="ow">not</span> <span class="n">flush</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="ADUser.get_password_last_set"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.get_password_last_set">[docs]</a>    <span class="k">def</span> <span class="nf">get_password_last_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">:</span> 
+    <span class="k">def</span> <span class="nf">grant_password_lease</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flush</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_attribute</span><span class="p">(</span><span class="s2">&quot;PwdLastSet&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">no_flush</span><span class="o">=</span><span class="p">(</span><span class="ow">not</span> <span class="n">flush</span><span class="p">))</span>
+
+<div class="viewcode-block" id="ADUser.get_password_last_set"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.get_password_last_set">[docs]</a>    <span class="k">def</span> <span class="nf">get_password_last_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns datetime object of when user last reset their password.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_password_last_set</span><span class="p">()</span></div>
-    
+
 <div class="viewcode-block" id="ADUser.get_max_pwd_age"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.get_max_pwd_age">[docs]</a>    <span class="k">def</span> <span class="nf">get_max_pwd_age</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns timespan object representing the max password age on a user&#39;s domain&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">pyadutils</span><span class="o">.</span><span class="n">convert_timespan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_domain</span><span class="p">()</span><span class="o">.</span><span class="n">maxPwdAge</span><span class="p">)</span></div>
-        
+
 <div class="viewcode-block" id="ADUser.get_expiration"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.get_expiration">[docs]</a>    <span class="k">def</span> <span class="nf">get_expiration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gets the expiration date of the password as a datetime object.</span>
 <span class="sd">        The _ldap_adsi_obj.AccountExpirationDate can be inaccurate and</span>
 <span class="sd">        return the UNIX Epoch instead of the true expiration date.&quot;&quot;&quot;</span>
         <span class="n">uac_settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_user_account_control_settings</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">uac_settings</span><span class="p">[</span><span class="n">flag</span><span class="p">]</span> <span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;SMARTCARD_REQUIRED&quot;</span><span class="p">,</span>
-         <span class="s2">&quot;DONT_EXPIRE_PASSWD&quot;</span><span class="p">,</span> <span class="s2">&quot;WORKSTATION_TRUST_ACCOUNT&quot;</span><span class="p">,</span>
-         <span class="s2">&quot;SERVER_TRUST_ACCOUNT&quot;</span><span class="p">,</span> <span class="s2">&quot;INTERDOMAIN_TRUST_ACCOUNT&quot;</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+            <span class="n">uac_settings</span><span class="p">[</span><span class="n">flag</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="s2">&quot;SMARTCARD_REQUIRED&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;DONT_EXPIRE_PASSWD&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;WORKSTATION_TRUST_ACCOUNT&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;SERVER_TRUST_ACCOUNT&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;INTERDOMAIN_TRUST_ACCOUNT&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s1">&#39;pwdLastSet&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1970</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s2">&quot;pwdLastSet&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1970</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_password_last_set</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_max_pwd_age</span><span class="p">()</span></div>
-            
-<div class="viewcode-block" id="ADUser.set_expiration"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.set_expiration">[docs]</a>    <span class="k">def</span> <span class="nf">set_expiration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">flush</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="ADUser.set_expiration"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.set_expiration">[docs]</a>    <span class="k">def</span> <span class="nf">set_expiration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">flush</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Sets the expiration date of the password to the given value&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ldap_adsi_obj</span><span class="o">.</span><span class="n">AccountExpirationDate</span> <span class="o">=</span> <span class="n">dt</span>
         <span class="k">if</span> <span class="n">flush</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_flush</span><span class="p">()</span></div>
-        
+
 <div class="viewcode-block" id="ADUser.get_password_expired"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.get_password_expired">[docs]</a>    <span class="k">def</span> <span class="nf">get_password_expired</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns a bool representing whether the password has expired.</span>
 <span class="sd">        The passwordexpired property will often return True even if not expired.&quot;&quot;&quot;</span>
@@ -105,25 +122,26 @@
         <span class="k">if</span> <span class="n">expiration_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="n">expiration_date</span> <span class="o">&lt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span></div>
-        
-<div class="viewcode-block" id="ADUser.unlock"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.unlock">[docs]</a>    <span class="k">def</span> <span class="nf">unlock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">flush</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="ADUser.unlock"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.unlock">[docs]</a>    <span class="k">def</span> <span class="nf">unlock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flush</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Unlock the user&#39;s account&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update_attribute</span><span class="p">(</span><span class="s1">&#39;lockoutTime&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">no_flush</span><span class="o">=</span><span class="p">(</span><span class="ow">not</span> <span class="n">flush</span><span class="p">))</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_attribute</span><span class="p">(</span><span class="s2">&quot;lockoutTime&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">no_flush</span><span class="o">=</span><span class="p">(</span><span class="ow">not</span> <span class="n">flush</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="ADUser.set_managedby"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.set_managedby">[docs]</a>    <span class="k">def</span> <span class="nf">set_managedby</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">flush</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="ADUser.set_managedby"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.set_managedby">[docs]</a>    <span class="k">def</span> <span class="nf">set_managedby</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">flush</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Sets managedBy on object to the specified user&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">ADUser</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expected AD User object got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">user</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">ADUser</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected AD User object got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">user</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">update_attribute</span><span class="p">(</span><span class="s1">&#39;manager&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">dn</span><span class="p">,</span> <span class="n">no_flush</span><span class="o">=</span><span class="p">(</span><span class="ow">not</span> <span class="n">flush</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_attribute</span><span class="p">(</span><span class="s2">&quot;manager&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">dn</span><span class="p">,</span> <span class="n">no_flush</span><span class="o">=</span><span class="p">(</span><span class="ow">not</span> <span class="n">flush</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">clear_managedby</span><span class="p">(</span><span class="s1">&#39;manager&#39;</span><span class="p">,</span><span class="n">flush</span><span class="o">=</span><span class="n">flush</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clear_managedby</span><span class="p">(</span><span class="s2">&quot;manager&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="n">flush</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ADUser.clear_managedby"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.clear_managedby">[docs]</a>    <span class="k">def</span> <span class="nf">clear_managedby</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">flush</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="ADUser.clear_managedby"><a class="viewcode-back" href="../../objects.html#pyad.aduser.ADUser.clear_managedby">[docs]</a>    <span class="k">def</span> <span class="nf">clear_managedby</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flush</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Sets object to be managedBy nobody&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">clear_attribute</span><span class="p">(</span><span class="s1">&#39;manager&#39;</span><span class="p">,</span><span class="n">flush</span><span class="o">=</span><span class="n">flush</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_attribute</span><span class="p">(</span><span class="s2">&quot;manager&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="n">flush</span><span class="p">)</span></div></div>
 
-<span class="n">ADObject</span><span class="o">.</span><span class="n">_py_ad_object_mappings</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ADUser</span>
+
+<span class="n">ADObject</span><span class="o">.</span><span class="n">_py_ad_object_mappings</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ADUser</span>
 </pre></div>
 
             <div class="clearer"></div>
@@ -152,7 +170,10 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Python Active Directory Tools 0.6 documentation</a> &#187;</li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Python Active Directory Tools 0.6.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyad.aduser</a></li> 
       </ul>

@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Constants and Exceptions &#8212; Python Active Directory Tools 0.6.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Manipulating Active Directory Objects" href="objects.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="objects.html" title="Manipulating Active Directory Objects"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Python Active Directory Tools 0.6.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Constants and Exceptions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-pyad.pyadconstants">
+<span id="constants-and-exceptions"></span><h1>Constants and Exceptions<a class="headerlink" href="#module-pyad.pyadconstants" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-pyad.pyadexceptions"></span><dl class="py exception">
+<dt class="sig sig-object py" id="pyad.pyadexceptions.BaseException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.pyadexceptions.</span></span><span class="sig-name descname"><span class="pre">BaseException</span></span><a class="reference internal" href="_modules/pyad/pyadexceptions.html#BaseException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.pyadexceptions.BaseException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pyad.pyadexceptions.InvalidAttribute">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.pyadexceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidAttribute</span></span><a class="reference internal" href="_modules/pyad/pyadexceptions.html#InvalidAttribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.pyadexceptions.InvalidAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyad.pyadexceptions.BaseException" title="pyad.pyadexceptions.BaseException"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyad.pyadexceptions.BaseException</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeError</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pyad.pyadexceptions.InvalidObjectException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.pyadexceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidObjectException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/pyadexceptions.html#InvalidObjectException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.pyadexceptions.InvalidObjectException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyad.pyadexceptions.noObjectFoundException" title="pyad.pyadexceptions.noObjectFoundException"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyad.pyadexceptions.noObjectFoundException</span></code></a>, <a class="reference internal" href="#pyad.pyadexceptions.win32Exception" title="pyad.pyadexceptions.win32Exception"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyad.pyadexceptions.win32Exception</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pyad.pyadexceptions.SetupError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.pyadexceptions.</span></span><span class="sig-name descname"><span class="pre">SetupError</span></span><a class="reference internal" href="_modules/pyad/pyadexceptions.html#SetupError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.pyadexceptions.SetupError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyad.pyadexceptions.BaseException" title="pyad.pyadexceptions.BaseException"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyad.pyadexceptions.BaseException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pyad.pyadexceptions.comException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.pyadexceptions.</span></span><span class="sig-name descname"><span class="pre">comException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/pyadexceptions.html#comException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.pyadexceptions.comException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyad.pyadexceptions.BaseException" title="pyad.pyadexceptions.BaseException"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyad.pyadexceptions.BaseException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pyad.pyadexceptions.genericADSIException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.pyadexceptions.</span></span><span class="sig-name descname"><span class="pre">genericADSIException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/pyadexceptions.html#genericADSIException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.pyadexceptions.genericADSIException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyad.pyadexceptions.comException" title="pyad.pyadexceptions.comException"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyad.pyadexceptions.comException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pyad.pyadexceptions.invalidOwnerException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.pyadexceptions.</span></span><span class="sig-name descname"><span class="pre">invalidOwnerException</span></span><a class="reference internal" href="_modules/pyad/pyadexceptions.html#invalidOwnerException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.pyadexceptions.invalidOwnerException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyad.pyadexceptions.BaseException" title="pyad.pyadexceptions.BaseException"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyad.pyadexceptions.BaseException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pyad.pyadexceptions.invalidResults">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.pyadexceptions.</span></span><span class="sig-name descname"><span class="pre">invalidResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberResults</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/pyadexceptions.html#invalidResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.pyadexceptions.invalidResults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyad.pyadexceptions.BaseException" title="pyad.pyadexceptions.BaseException"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyad.pyadexceptions.BaseException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pyad.pyadexceptions.noExecutedQuery">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.pyadexceptions.</span></span><span class="sig-name descname"><span class="pre">noExecutedQuery</span></span><a class="reference internal" href="_modules/pyad/pyadexceptions.html#noExecutedQuery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.pyadexceptions.noExecutedQuery" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyad.pyadexceptions.BaseException" title="pyad.pyadexceptions.BaseException"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyad.pyadexceptions.BaseException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pyad.pyadexceptions.noObjectFoundException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.pyadexceptions.</span></span><span class="sig-name descname"><span class="pre">noObjectFoundException</span></span><a class="reference internal" href="_modules/pyad/pyadexceptions.html#noObjectFoundException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.pyadexceptions.noObjectFoundException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyad.pyadexceptions.BaseException" title="pyad.pyadexceptions.BaseException"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyad.pyadexceptions.BaseException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pyad.pyadexceptions.win32Exception">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyad.pyadexceptions.</span></span><span class="sig-name descname"><span class="pre">win32Exception</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/pyadexceptions.html#win32Exception"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.pyadexceptions.win32Exception" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyad.pyadexceptions.comException" title="pyad.pyadexceptions.comException"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyad.pyadexceptions.comException</span></code></a></p>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="objects.html"
+                          title="previous chapter">Manipulating Active Directory Objects</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/constants.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="objects.html" title="Manipulating Active Directory Objects"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Python Active Directory Tools 0.6.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Constants and Exceptions</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Zakir Durumeric.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+<script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '4fe3a2a4613f5d2d5600005d');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+
+  </body>
+</html>

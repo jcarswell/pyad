@@ -147,11 +147,11 @@ for which you queried, for performance reasons.
 
     q.execute_query(
         attributes = ["distinguishedName", "description"],
-        where_clause = "objectClass = '*'",
+        where_clause = "objectClass = 'person'",
         base_dn = "OU=users, DC=domain, DC=com"
     )
 
-    for row in q.get_results():
+    for row in q:
         print row["distinguishedName"]
 
 When you search an AD Forest for users you will likely want to search on "CN", you can simulate 
@@ -165,8 +165,10 @@ a SQL 'LIKE' where clause with the AD wildcard character '*'. E.g. cn='\*john\*'
     
     q.execute_query(
         attributes = ["distinguishedName", "description", "cn"],
-        where_clause=("cn = '*john*'"), 
+        where_clause="cn = '*john*'", 
     )
         
-    for row in q.get_results(): 
+    for row in q: 
         print( row )
+
+Multiple clauses can be combined with the 'AND' or 'OR' keywords.

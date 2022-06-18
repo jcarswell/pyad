@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyad.addomain &#8212; Python Active Directory Tools 0.6 documentation</title>
+    <title>pyad.addomain &#8212; Python Active Directory Tools 0.6.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
     
@@ -23,7 +23,10 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Python Active Directory Tools 0.6 documentation</a> &#187;</li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Python Active Directory Tools 0.6.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyad.addomain</a></li> 
       </ul>
@@ -38,23 +41,34 @@
 <span></span><span class="kn">from</span> <span class="nn">.adcontainer</span> <span class="kn">import</span> <span class="n">ADContainer</span>
 <span class="kn">from</span> <span class="nn">.adobject</span> <span class="kn">import</span> <span class="n">ADObject</span>
 
-<div class="viewcode-block" id="ADDomain"><a class="viewcode-back" href="../../objects.html#pyad.adobject.ADDomain">[docs]</a><span class="k">class</span> <span class="nc">ADDomain</span><span class="p">(</span><span class="n">ADContainer</span><span class="p">):</span>
 
-<div class="viewcode-block" id="ADDomain.get_default_upn"><a class="viewcode-back" href="../../objects.html#pyad.adobject.ADDomain.get_default_upn">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_upn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+<div class="viewcode-block" id="ADDomain"><a class="viewcode-back" href="../../objects.html#pyad.adobject.ADDomain">[docs]</a><span class="k">class</span> <span class="nc">ADDomain</span><span class="p">(</span><span class="n">ADContainer</span><span class="p">):</span>
+<div class="viewcode-block" id="ADDomain.get_default_upn"><a class="viewcode-back" href="../../objects.html#pyad.adobject.ADDomain.get_default_upn">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_upn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the default userPrincipalName for the domain.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ldap_adsi_obj</span><span class="o">.</span><span class="n">GetInfoEx</span><span class="p">([</span><span class="s2">&quot;canonicalName&quot;</span><span class="p">,],</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ldap_adsi_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;canonicalName&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span></div></div>
-        
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ldap_adsi_obj</span><span class="o">.</span><span class="n">GetInfoEx</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;canonicalName&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ldap_adsi_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;canonicalName&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span></div></div>
+
+
 <span class="k">def</span> <span class="nf">__get_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns the domain to which the object belongs.&quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_domain_pyad_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">domain_path</span> <span class="o">=</span> <span class="s1">&#39;dc=&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dn</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;dc=&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_domain_pyad_obj</span> <span class="o">=</span> <span class="n">ADDomain</span><span class="o">.</span><span class="n">from_dn</span><span class="p">(</span><span class="n">domain_path</span><span class="p">,</span> 
-            <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_make_options</span><span class="p">())</span>
+        <span class="n">domain_path</span> <span class="o">=</span> <span class="s2">&quot;dc=&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dn</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;dc=&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_domain_pyad_obj</span> <span class="o">=</span> <span class="n">ADDomain</span><span class="o">.</span><span class="n">from_dn</span><span class="p">(</span>
+            <span class="n">domain_path</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_make_options</span><span class="p">()</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_domain_pyad_obj</span>
+
+
 <span class="n">ADObject</span><span class="o">.</span><span class="n">get_domain</span> <span class="o">=</span> <span class="n">__get_domain</span>
 
-<span class="n">ADObject</span><span class="o">.</span><span class="n">_py_ad_object_mappings</span><span class="p">[</span><span class="s1">&#39;domain&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ADDomain</span>
+<span class="n">ADObject</span><span class="o">.</span><span class="n">_py_ad_object_mappings</span><span class="p">[</span><span class="s2">&quot;domain&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ADDomain</span>
 </pre></div>
 
             <div class="clearer"></div>
@@ -83,7 +97,10 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Python Active Directory Tools 0.6 documentation</a> &#187;</li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Python Active Directory Tools 0.6.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyad.addomain</a></li> 
       </ul>

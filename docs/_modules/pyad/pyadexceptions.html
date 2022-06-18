@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyad.pyadexceptions &#8212; Python Active Directory Tools 0.6.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Python Active Directory Tools 0.6.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyad.pyadexceptions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyad.pyadexceptions</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="BaseException"><a class="viewcode-back" href="../../constants.html#pyad.pyadexceptions.BaseException">[docs]</a><span></span><span class="k">class</span> <span class="nc">BaseException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="comException"><a class="viewcode-back" href="../../constants.html#pyad.pyadexceptions.comException">[docs]</a><span class="k">class</span> <span class="nc">comException</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error_info</span><span class="p">,</span> <span class="n">additional_info</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_info</span> <span class="o">=</span> <span class="n">error_info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">additional_info</span> <span class="o">=</span> <span class="n">additional_info</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">): </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_info</span><span class="p">[</span><span class="s2">&quot;error_constant&quot;</span><span class="p">]),</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_info</span><span class="p">[</span><span class="s2">&quot;error_code&quot;</span><span class="p">]),</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_info</span><span class="p">[</span><span class="s2">&quot;error_message&quot;</span><span class="p">]),</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="genericADSIException"><a class="viewcode-back" href="../../constants.html#pyad.pyadexceptions.genericADSIException">[docs]</a><span class="k">class</span> <span class="nc">genericADSIException</span><span class="p">(</span><span class="n">comException</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">): </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error_info</span><span class="p">[</span><span class="s2">&quot;error_constant&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error_info</span><span class="p">[</span><span class="s2">&quot;error_code&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error_info</span><span class="p">[</span><span class="s2">&quot;error_message&quot;</span><span class="p">],</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="win32Exception"><a class="viewcode-back" href="../../constants.html#pyad.pyadexceptions.win32Exception">[docs]</a><span class="k">class</span> <span class="nc">win32Exception</span><span class="p">(</span><span class="n">comException</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_info</span><span class="p">[</span><span class="s2">&quot;error_code&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_info</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="invalidOwnerException"><a class="viewcode-back" href="../../constants.html#pyad.pyadexceptions.invalidOwnerException">[docs]</a><span class="k">class</span> <span class="nc">invalidOwnerException</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;The submitted object is not eligible to own another object.&quot;</span></div>
+
+
+<div class="viewcode-block" id="noObjectFoundException"><a class="viewcode-back" href="../../constants.html#pyad.pyadexceptions.noObjectFoundException">[docs]</a><span class="k">class</span> <span class="nc">noObjectFoundException</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;The requested object does not exist.&quot;</span></div>
+
+
+<div class="viewcode-block" id="InvalidObjectException"><a class="viewcode-back" href="../../constants.html#pyad.pyadexceptions.InvalidObjectException">[docs]</a><span class="k">class</span> <span class="nc">InvalidObjectException</span><span class="p">(</span><span class="n">noObjectFoundException</span><span class="p">,</span> <span class="n">win32Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="InvalidAttribute"><a class="viewcode-back" href="../../constants.html#pyad.pyadexceptions.InvalidAttribute">[docs]</a><span class="k">class</span> <span class="nc">InvalidAttribute</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s1">&#39;The attribute &quot;</span><span class="si">%s</span><span class="s1">&quot; is not permitted by the schema definition of the object &quot;</span><span class="si">%s</span><span class="s1">&quot; (the requested attribute does not exist).&#39;</span>
+            <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attribute</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="noExecutedQuery"><a class="viewcode-back" href="../../constants.html#pyad.pyadexceptions.noExecutedQuery">[docs]</a><span class="k">class</span> <span class="nc">noExecutedQuery</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;No query has been executed. Therefore there are no results to return. Execute a query before requesting results.&quot;</span></div>
+
+
+<div class="viewcode-block" id="invalidResults"><a class="viewcode-back" href="../../constants.html#pyad.pyadexceptions.invalidResults">[docs]</a><span class="k">class</span> <span class="nc">invalidResults</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numberResults</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_results</span> <span class="o">=</span> <span class="n">numberResults</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s2">&quot;The specified query returned </span><span class="si">%i</span><span class="s2"> results. getSingleResults only functions with a single result.&quot;</span>
+            <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_results</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SetupError"><a class="viewcode-back" href="../../constants.html#pyad.pyadexceptions.SetupError">[docs]</a><span class="k">class</span> <span class="nc">SetupError</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Python Active Directory Tools 0.6.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyad.pyadexceptions</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Zakir Durumeric.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+<script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '4fe3a2a4613f5d2d5600005d');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+
+  </body>
+</html>

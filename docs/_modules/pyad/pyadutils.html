@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyad.pyadutils &#8212; Python Active Directory Tools 0.6.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Python Active Directory Tools 0.6.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyad.pyadutils</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyad.pyadutils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">win32api</span>
+<span class="kn">import</span> <span class="nn">win32security</span>
+<span class="kn">import</span> <span class="nn">pywintypes</span>
+
+<span class="kn">from</span> <span class="nn">.adbase</span> <span class="kn">import</span> <span class="n">ADBase</span>
+<span class="kn">from</span> <span class="nn">.pyadconstants</span> <span class="kn">import</span> <span class="n">GENERIC_ADSI_ERRORS</span><span class="p">,</span> <span class="n">GENERIC_COM_ERRORS</span><span class="p">,</span> <span class="n">WIN32_ERRORS</span>
+<span class="kn">from</span> <span class="nn">.pyadexceptions</span> <span class="kn">import</span> <span class="n">genericADSIException</span><span class="p">,</span> <span class="n">comException</span><span class="p">,</span> <span class="n">win32Exception</span>
+
+
+<div class="viewcode-block" id="validate_credentials"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.validate_credentials">[docs]</a><span class="k">def</span> <span class="nf">validate_credentials</span><span class="p">(</span>
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">domain</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;win32.PyHandle&quot;</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    validate_credentials</span>
+<span class="sd">    Validates credentials; returns a PyHANDLE object with a bool value</span>
+<span class="sd">    of True if the credentials are valid, else returns None.</span>
+<span class="sd">    Note that if the user would not be able to log on; for example,</span>
+<span class="sd">    due to the account being expired; None will be returned.</span>
+
+<span class="sd">    :param username: username</span>
+<span class="sd">    :type username: str</span>
+<span class="sd">    :param password: password</span>
+<span class="sd">    :type password: str</span>
+<span class="sd">    :param domain: domain name, defaults to None</span>
+<span class="sd">    :type domain: str, optional</span>
+<span class="sd">    :return: PyHandle Object with a bool of true. or None</span>
+<span class="sd">    :rtype: win32.PyHandle</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">valid</span> <span class="o">=</span> <span class="n">win32security</span><span class="o">.</span><span class="n">LogonUser</span><span class="p">(</span>
+            <span class="n">username</span><span class="p">,</span>
+            <span class="n">domain</span><span class="p">,</span>
+            <span class="n">password</span><span class="p">,</span>
+            <span class="n">win32security</span><span class="o">.</span><span class="n">LOGON32_LOGON_NETWORK</span><span class="p">,</span>
+            <span class="n">win32security</span><span class="o">.</span><span class="n">LOGON32_PROVIDER_DEFAULT</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">valid</span><span class="p">,</span> <span class="s2">&quot;Valid should ALWAYS have a true value&quot;</span>
+        <span class="k">return</span> <span class="n">valid</span>
+    <span class="k">except</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="convert_error_code"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.convert_error_code">[docs]</a><span class="k">def</span> <span class="nf">convert_error_code</span><span class="p">(</span><span class="n">error_code</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert error code from the format returned by pywin32 to the format that Microsoft</span>
+<span class="sd">    documents everything in.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">error_code</span> <span class="o">%</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span></div>
+
+
+<span class="c1"># expects the actually pywintypes.com_error exception that&#39;s thrown...</span>
+<div class="viewcode-block" id="interpret_com_exception"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.interpret_com_exception">[docs]</a><span class="k">def</span> <span class="nf">interpret_com_exception</span><span class="p">(</span><span class="n">excp</span><span class="p">,</span> <span class="n">additional_info</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_num&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert_error_code</span><span class="p">(</span><span class="n">excp</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">5</span><span class="p">])</span>
+    <span class="c1"># for some reason hex() includes the L for long in the hex...</span>
+    <span class="c1"># however since it&#39;s a string, we don&#39;t care...</span>
+    <span class="c1"># since L would never be in a hex code, we can safely just remove it.</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_code&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_num&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_code&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;0x80005&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_num&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">GENERIC_ADSI_ERRORS</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;exception_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;known_generic_adsi_error&quot;</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_constant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GENERIC_ADSI_ERRORS</span><span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_num&quot;</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">GENERIC_ADSI_ERRORS</span><span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_num&quot;</span><span class="p">]][</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># this supposedly should not happen, but I&#39;d rather be ready for</span>
+            <span class="c1"># the case that Microsoft made a typo somewhere than die weirdly.</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_constant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;exception_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown_generic_adsi_error&quot;</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown generic ADSI error&quot;</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;exception&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">genericADSIException</span>
+    <span class="k">elif</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_code&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;0x8007&quot;</span><span class="p">:</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;exception_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;win32_error&quot;</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_constant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># returns information about error from winerror.h file...</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">win32api</span><span class="o">.</span><span class="n">FormatMessage</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_num&quot;</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_num&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">GENERIC_COM_ERRORS</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;exception_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;generic_com_error&quot;</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_constant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GENERIC_COM_ERRORS</span><span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_num&quot;</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GENERIC_COM_ERRORS</span><span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_num&quot;</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;exception_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_constant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">excp</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;additional_info&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">additional_info</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="pass_up_com_exception"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.pass_up_com_exception">[docs]</a><span class="k">def</span> <span class="nf">pass_up_com_exception</span><span class="p">(</span><span class="n">excp</span><span class="p">,</span> <span class="n">additional_info</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="k">if</span> <span class="n">excp</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">in</span> <span class="p">(</span><span class="n">genericADSIException</span><span class="p">,</span> <span class="n">comException</span><span class="p">,</span> <span class="n">win32Exception</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">excp</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="n">interpret_com_exception</span><span class="p">(</span><span class="n">excp</span><span class="p">)</span>
+        <span class="n">type_</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;exception_type&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">type_</span> <span class="o">==</span> <span class="s2">&quot;win32_error&quot;</span><span class="p">:</span>
+            <span class="c1"># raise exception defined in WIN32_ERRORs if there is one...</span>
+            <span class="c1"># otherwise, just raise a generic win32Exception</span>
+            <span class="k">raise</span> <span class="n">WIN32_ERRORS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;error_num&quot;</span><span class="p">],</span> <span class="n">win32Exception</span><span class="p">)(</span>
+                <span class="n">error_info</span><span class="o">=</span><span class="n">info</span><span class="p">,</span> <span class="n">additional_info</span><span class="o">=</span><span class="n">additional_info</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">type_</span> <span class="o">==</span> <span class="s2">&quot;known_generic_adsi_error&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GENERIC_ADSI_ERRORS</span><span class="p">[</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;error_num&quot;</span><span class="p">]][</span><span class="mi">3</span><span class="p">](</span>
+                <span class="n">error_info</span><span class="o">=</span><span class="n">info</span><span class="p">,</span> <span class="n">additional_info</span><span class="o">=</span><span class="n">additional_info</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">type_</span> <span class="o">==</span> <span class="s2">&quot;unknown_generic_adsi_error&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">genericADSIException</span><span class="p">(</span><span class="n">error_info</span><span class="o">=</span><span class="n">info</span><span class="p">,</span> <span class="n">additional_info</span><span class="o">=</span><span class="n">additional_info</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">comException</span><span class="p">(</span><span class="n">error_info</span><span class="o">=</span><span class="n">info</span><span class="p">,</span> <span class="n">additional_info</span><span class="o">=</span><span class="n">additional_info</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="convert_datetime"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.convert_datetime">[docs]</a><span class="k">def</span> <span class="nf">convert_datetime</span><span class="p">(</span><span class="n">adsi_time_com_obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts 64-bit integer COM object representing time into a python datetime object.&quot;&quot;&quot;</span>
+    <span class="c1"># credit goes to John Nielsen who documented this at</span>
+    <span class="c1"># http://docs.activestate.com/activepython/2.6/pywin32/html/com/help/active_directory.html.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">adsi_time_com_obj</span><span class="p">,</span> <span class="s2">&quot;highpart&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span>
+        <span class="n">adsi_time_com_obj</span><span class="p">,</span> <span class="s2">&quot;lowpart&quot;</span>
+    <span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Expected adsi_time object got &#39;</span><span class="si">{</span><span class="n">adsi_time_com_obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+        <span class="p">)</span>
+    <span class="n">high_part</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">adsi_time_com_obj</span><span class="o">.</span><span class="n">highpart</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span>
+    <span class="n">low_part</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">adsi_time_com_obj</span><span class="o">.</span><span class="n">lowpart</span><span class="p">)</span>
+    <span class="n">date_value</span> <span class="o">=</span> <span class="p">((</span><span class="n">high_part</span> <span class="o">+</span> <span class="n">low_part</span><span class="p">)</span> <span class="o">-</span> <span class="mi">116444736000000000</span><span class="p">)</span> <span class="o">//</span> <span class="mi">10000000</span>
+    <span class="c1">#</span>
+    <span class="c1"># The &quot;fromtimestamp&quot; function in datetime cannot take a</span>
+    <span class="c1"># negative value, so if the resulting date value is negative,</span>
+    <span class="c1"># explicitly set it to 18000. This will result in the date</span>
+    <span class="c1"># 1970-01-01 00:00:00 being returned from this function</span>
+    <span class="c1">#</span>
+    <span class="k">if</span> <span class="n">date_value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">date_value</span> <span class="o">=</span> <span class="mi">18000</span>
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">date_value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="convert_bigint"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.convert_bigint">[docs]</a><span class="k">def</span> <span class="nf">convert_bigint</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="c1"># based on http://www.selfadsi.org/ads-attributes/user-usnChanged.htm</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;HighPart&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;LowPart&quot;</span><span class="p">):</span>
+        <span class="n">h</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">HighPart</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">LowPart</span>
+        <span class="k">if</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span><span class="p">)</span> <span class="o">+</span> <span class="n">l</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected adsi time object got &#39;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="convert_timespan"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.convert_timespan">[docs]</a><span class="k">def</span> <span class="nf">convert_timespan</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts COM object representing time span to a python time span object.&quot;&quot;&quot;</span>
+    <span class="n">as_seconds</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">abs</span><span class="p">(</span><span class="n">convert_bigint</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span> <span class="o">/</span> <span class="mi">10000000</span>
+    <span class="p">)</span>  <span class="c1"># number of 100 nanoseconds in a second</span>
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">as_seconds</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="convert_guid"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.convert_guid">[docs]</a><span class="k">def</span> <span class="nf">convert_guid</span><span class="p">(</span><span class="n">guid_object</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">IID</span><span class="p">(</span><span class="n">guid_object</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="convert_sid"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.convert_sid">[docs]</a><span class="k">def</span> <span class="nf">convert_sid</span><span class="p">(</span><span class="n">sid_object</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">SID</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">sid_object</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="generate_list"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.generate_list">[docs]</a><span class="k">def</span> <span class="nf">generate_list</span><span class="p">(</span><span class="nb">input</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">input</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">set</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="nb">input</span><span class="p">,</span>
+        <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="escape_path"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.escape_path">[docs]</a><span class="k">def</span> <span class="nf">escape_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">escapes</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="s2">&quot;\+&quot;</span><span class="p">,</span> <span class="s2">&quot;+&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;\*&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;\(&quot;</span><span class="p">,</span> <span class="s2">&quot;(&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;\)&quot;</span><span class="p">,</span> <span class="s2">&quot;)&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;\/&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">,&quot;</span><span class="p">,</span> <span class="s2">&quot;,,&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">5c&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">2a&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">28&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">29&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">2f&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">2b&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">00&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">char</span><span class="p">,</span> <span class="n">escape</span> <span class="ow">in</span> <span class="n">escapes</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">char</span><span class="p">,</span> <span class="n">escape</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,,&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">2c&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">path</span></div>
+
+
+<div class="viewcode-block" id="generate_ads_path"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.generate_ads_path">[docs]</a><span class="k">def</span> <span class="nf">generate_ads_path</span><span class="p">(</span>
+    <span class="n">distinguished_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a proper ADsPath to be used when connecting to an active directory object or</span>
+<span class="sd">    when searching active directory.</span>
+
+<span class="sd">    :param distinguished_name: DN of object or search base such as</span>
+<span class="sd">        &#39;cn=John Smith,cn=users,dc=example,dc=com&#39;</span>
+<span class="sd">    :type distinguished_name: str</span>
+<span class="sd">    :param type: the connection type, either &#39;LDAP&#39;, &#39;LDAPS&#39;, or &#39;GC&#39;</span>
+<span class="sd">    :type type: str</span>
+<span class="sd">    :param server: FQDN of domain controller if necessary to connect to a particular server,</span>
+<span class="sd">        defaults to the global catalog server</span>
+<span class="sd">    :type server: str, optional</span>
+<span class="sd">    :param port: port number for directory service if not default port.</span>
+<span class="sd">        If port is specified, server must be specified.</span>
+<span class="sd">    :type port: int, optional</span>
+<span class="sd">    :raises TypeError: Invalid type for type</span>
+<span class="sd">    :return: the ADsPath to be used when connecting to Active Directory</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;LDAP&quot;</span> <span class="ow">or</span> <span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;LDAPS&quot;</span><span class="p">:</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="n">server</span> <span class="k">if</span> <span class="n">server</span> <span class="k">else</span> <span class="n">ADBase</span><span class="o">.</span><span class="n">default_ldap_server</span>
+        <span class="n">port</span> <span class="o">=</span> <span class="n">port</span> <span class="k">if</span> <span class="n">port</span> <span class="k">else</span> <span class="n">ADBase</span><span class="o">.</span><span class="n">default_ldap_port</span>
+    <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;GC&quot;</span><span class="p">:</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="n">server</span> <span class="k">if</span> <span class="n">server</span> <span class="k">else</span> <span class="n">ADBase</span><span class="o">.</span><span class="n">default_gc_server</span>
+        <span class="n">port</span> <span class="o">=</span> <span class="n">port</span> <span class="k">if</span> <span class="n">port</span> <span class="k">else</span> <span class="n">ADBase</span><span class="o">.</span><span class="n">default_gc_port</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid type specified.&quot;</span><span class="p">)</span>
+
+    <span class="n">ads_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="nb">type</span><span class="p">,</span> <span class="s2">&quot;://&quot;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">server</span><span class="p">:</span>
+        <span class="n">ads_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">ads_path</span><span class="p">,</span> <span class="n">server</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">port</span><span class="p">:</span>
+            <span class="n">ads_path</span> <span class="o">=</span> <span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">ads_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">)))</span>
+        <span class="n">ads_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">ads_path</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">))</span>
+    <span class="n">ads_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">ads_path</span><span class="p">,</span> <span class="n">escape_path</span><span class="p">(</span><span class="n">distinguished_name</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">ads_path</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Python Active Directory Tools 0.6.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyad.pyadutils</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Zakir Durumeric.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+<script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '4fe3a2a4613f5d2d5600005d');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+
+  </body>
+</html>
