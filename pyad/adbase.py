@@ -1,25 +1,18 @@
 import sys
+import win32com.client
 
-# Since we're depending on ADSI, you have to be on windows...
-if sys.platform != 'win32':
-    raise Exception("Must be running Windows in order to use pyad.")
-
-try:
-    import win32com.client
-except ImportError:
-    raise ImportError("pywin32 library required. Download from http://sourceforge.net/projects/pywin32/")
-
-# Import constants and other common elements.
 from .pyadexceptions import SetupError
 
-_adsi_provider = win32com.client.Dispatch('ADsNameSpaces')
+_adsi_provider = win32com.client.Dispatch("ADsNameSpaces")
 
 try:
     # Discover default domain and forest information
-    __default_domain_obj = _adsi_provider.GetObject('', "LDAP://rootDSE")
+    __default_domain_obj = _adsi_provider.GetObject("", "LDAP://rootDSE")
 except:
     # If there was an error, this this computer might not be on a domain.
-    print("WARN: unable to connect to default domain. Computer is likely not attached to an AD domain")
+    print(
+        "WARN: unable to connect to default domain. Computer is likely not attached to an AD domain"
+    )
     __default_domain_obj = None
     _default_detected_forest = None
     _default_detected_domain = None
@@ -32,8 +25,10 @@ else:
 
 
 class ADBase(object):
-    """Base class that is utilized by all objects within package to help
-    store defaults. (search, query, all AD objects)"""
+    """
+    Base class that is utilized by all objects within package to help
+    store defaults. (search, query, all AD objects)
+    """
 
     DEFAULTS_OPTIONS_MAPPINGS = [
         ("default_ldap_server", "server"),
@@ -43,7 +38,7 @@ class ADBase(object):
         ("default_username", "username"),
         ("default_password", "password"),
         ("default_ldap_authentication_flag", "authentication_flag"),
-        ("default_ssl", "ssl")
+        ("default_ssl", "ssl"),
     ]
 
     default_ssl = False
@@ -53,7 +48,7 @@ class ADBase(object):
     default_gc_port = None
     default_username = None
     default_password = None
-    default_ldap_protocol = 'LDAP'
+    default_ldap_protocol = "LDAP"
     default_ldap_authentication_flag = 0  # No credentials
     default_domain = _default_detected_domain
     default_forest = _default_detected_forest
@@ -84,6 +79,7 @@ class ADBase(object):
             return self.default_forest
         raise SetupError("Unable to detect default forest. Must specify search base.")
 
+
 def set_defaults(**kwargs):
     for k, v in kwargs.items():
-        setattr(ADBase, '_'.join(('default', k)), v)
+        setattr(ADBase, "_".join(("default", k)), v)
