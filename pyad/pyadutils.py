@@ -4,12 +4,15 @@ import win32security
 import pywintypes
 
 from .adbase import ADBase
-from .pyadconstants import GENERIC_ADSI_ERRORS,GENERIC_COM_ERRORS,WIN32_ERRORS
+from .pyadconstants import GENERIC_ADSI_ERRORS, GENERIC_COM_ERRORS, WIN32_ERRORS
 from .pyadexceptions import genericADSIException, comException, win32Exception
 
-def validate_credentials(username:str, password:str, domain=None):
+
+def validate_credentials(
+    username: str, password: str, domain: str = None
+) -> "win32.PyHandle":
     """
-    validate_credentials 
+    validate_credentials
     Validates credentials; returns a PyHANDLE object with a bool value
     of True if the credentials are valid, else returns None.
     Note that if the user would not be able to log on; for example,
@@ -25,77 +28,97 @@ def validate_credentials(username:str, password:str, domain=None):
     :rtype: win32.PyHandle
     """
     try:
-        valid = win32security.LogonUser(username, domain, password,
-                                        win32security.LOGON32_LOGON_NETWORK,
-                                        win32security.LOGON32_PROVIDER_DEFAULT)
+        valid = win32security.LogonUser(
+            username,
+            domain,
+            password,
+            win32security.LOGON32_LOGON_NETWORK,
+            win32security.LOGON32_PROVIDER_DEFAULT,
+        )
         assert valid, "Valid should ALWAYS have a true value"
         return valid
     except pywintypes.error:
         return None
 
-def convert_error_code(error_code):
-    """Convert error code from the format returned by pywin32 to the format that Microsoft documents everything in."""
-    return error_code % 2 ** 32
 
-#expects the actually pywintypes.com_error exception that's thrown...
+def convert_error_code(error_code):
+    """
+    Convert error code from the format returned by pywin32 to the format that Microsoft
+    documents everything in.
+    """
+
+    return error_code % 2**32
+
+
+# expects the actually pywintypes.com_error exception that's thrown...
 def interpret_com_exception(excp, additional_info={}):
     d = {}
-    d['error_num'] = convert_error_code(excp.args[2][5])
+    d["error_num"] = convert_error_code(excp.args[2][5])
     # for some reason hex() includes the L for long in the hex...
     # however since it's a string, we don't care...
     # since L would never be in a hex code, we can safely just remove it.
-    d['error_code'] = hex(d['error_num']).rstrip('L')
-    if d['error_code'][0:7] == '0x80005':
-        if d['error_num'] in list(GENERIC_ADSI_ERRORS.keys()):
-            d['exception_type'] = 'known_generic_adsi_error'
-            d['error_constant'] = GENERIC_ADSI_ERRORS[d['error_num']][0]
-            d['message'] = ' '.join(GENERIC_ADSI_ERRORS[d['error_num']][1:3])
+    d["error_code"] = hex(d["error_num"]).rstrip("L")
+    if d["error_code"][0:7] == "0x80005":
+        if d["error_num"] in list(GENERIC_ADSI_ERRORS.keys()):
+            d["exception_type"] = "known_generic_adsi_error"
+            d["error_constant"] = GENERIC_ADSI_ERRORS[d["error_num"]][0]
+            d["message"] = " ".join(GENERIC_ADSI_ERRORS[d["error_num"]][1:3])
         else:
             # this supposedly should not happen, but I'd rather be ready for
             # the case that Microsoft made a typo somewhere than die weirdly.
-            d['error_constant'] = None
-            d['exception_type'] = 'unknown_generic_adsi_error'
-            d['message'] = 'unknown generic ADSI error'
-            d['exception'] = genericADSIException
-    elif d['error_code'][0:6] == '0x8007':
-        d['exception_type'] = 'win32_error'
-        d['error_constant'] = None
+            d["error_constant"] = None
+            d["exception_type"] = "unknown_generic_adsi_error"
+            d["message"] = "unknown generic ADSI error"
+            d["exception"] = genericADSIException
+    elif d["error_code"][0:6] == "0x8007":
+        d["exception_type"] = "win32_error"
+        d["error_constant"] = None
         # returns information about error from winerror.h file...
-        d['message'] = win32api.FormatMessage(d['error_num'])
-    elif d['error_num'] in list(GENERIC_COM_ERRORS.keys()):
-        d['exception_type'] = 'generic_com_error'
-        d['error_constant'] = GENERIC_COM_ERRORS[d['error_num']][0]
-        d['message'] = GENERIC_COM_ERRORS[d['error_num']][1]
+        d["message"] = win32api.FormatMessage(d["error_num"])
+    elif d["error_num"] in list(GENERIC_COM_ERRORS.keys()):
+        d["exception_type"] = "generic_com_error"
+        d["error_constant"] = GENERIC_COM_ERRORS[d["error_num"]][0]
+        d["message"] = GENERIC_COM_ERRORS[d["error_num"]][1]
     else:
-        d['exception_type'] = 'unknown'
-        d['error_constant'] = None
-        d['message'] = excp.args[2][4]
-    d['additional_info'] = additional_info={}
+        d["exception_type"] = "unknown"
+        d["error_constant"] = None
+        d["message"] = excp.args[2][4]
+    d["additional_info"] = additional_info = {}
     return d
+
 
 def pass_up_com_exception(excp, additional_info={}):
     if excp.__class__ in (genericADSIException, comException, win32Exception):
         raise excp
     else:
         info = interpret_com_exception(excp)
-        type_ = info['exception_type']
-        if type_ == 'win32_error':
+        type_ = info["exception_type"]
+        if type_ == "win32_error":
             # raise exception defined in WIN32_ERRORs if there is one...
             # otherwise, just raise a generic win32Exception
-            raise WIN32_ERRORS.get(info['error_num'], win32Exception)(error_info=info, additional_info=additional_info)
-        elif type_ == 'known_generic_adsi_error':
-            raise GENERIC_ADSI_ERRORS[info['error_num']][3](error_info=info, additional_info=additional_info)
-        elif type_ == 'unknown_generic_adsi_error':
+            raise WIN32_ERRORS.get(info["error_num"], win32Exception)(
+                error_info=info, additional_info=additional_info
+            )
+        elif type_ == "known_generic_adsi_error":
+            raise GENERIC_ADSI_ERRORS[info["error_num"]][3](
+                error_info=info, additional_info=additional_info
+            )
+        elif type_ == "unknown_generic_adsi_error":
             raise genericADSIException(error_info=info, additional_info=additional_info)
         else:
             raise comException(error_info=info, additional_info=additional_info)
+
 
 def convert_datetime(adsi_time_com_obj):
     """Converts 64-bit integer COM object representing time into a python datetime object."""
     # credit goes to John Nielsen who documented this at
     # http://docs.activestate.com/activepython/2.6/pywin32/html/com/help/active_directory.html.
-    if not hasattr(adsi_time_com_obj,'highpart') or not hasattr(adsi_time_com_obj,'lowpart'):
-        raise ValueError(f"Expected adsi_time object got '{adsi_time_com_obj.__class__.__name__}'")
+    if not hasattr(adsi_time_com_obj, "highpart") or not hasattr(
+        adsi_time_com_obj, "lowpart"
+    ):
+        raise ValueError(
+            f"Expected adsi_time object got '{adsi_time_com_obj.__class__.__name__}'"
+        )
     high_part = int(adsi_time_com_obj.highpart) << 32
     low_part = int(adsi_time_com_obj.lowpart)
     date_value = ((high_part + low_part) - 116444736000000000) // 10000000
@@ -109,9 +132,10 @@ def convert_datetime(adsi_time_com_obj):
         date_value = 18000
     return datetime.datetime.fromtimestamp(date_value)
 
+
 def convert_bigint(obj):
     # based on http://www.selfadsi.org/ads-attributes/user-usnChanged.htm
-    if hasattr(obj,'HighPart') and hasattr(obj,'LowPart'):
+    if hasattr(obj, "HighPart") and hasattr(obj, "LowPart"):
         h, l = obj.HighPart, obj.LowPart
         if l < 0:
             h += 1
@@ -119,69 +143,93 @@ def convert_bigint(obj):
     else:
         raise ValueError(f"Expected adsi time object got '{obj.__class__.__name__}'")
 
+
 def convert_timespan(obj):
-    """Converts COM object representing timespan to a python timespan object."""
-    as_seconds = abs(convert_bigint(obj))/10000000 #number of 100 nanoseconds in a second
+    """Converts COM object representing time span to a python time span object."""
+    as_seconds = (
+        abs(convert_bigint(obj)) / 10000000
+    )  # number of 100 nanoseconds in a second
     return datetime.timedelta(seconds=as_seconds)
+
 
 def convert_guid(guid_object):
     return pywintypes.IID(guid_object, True)
 
+
 def convert_sid(sid_object):
     return pywintypes.SID(bytes(sid_object))
+
 
 def generate_list(input):
     if type(input) is list:
         return input
-    elif type(input) in (set,tuple):
+    elif type(input) in (set, tuple):
         return list(input)
     else:
-        return [input,]
+        return [
+            input,
+        ]
+
 
 def escape_path(path):
     escapes = (
-        ('\+','+'),
-        ('\*','*'),
-        ('\(','('),
-        ('\)',')'),
-        ('\/','/'),
-        ('\\,',',,'),
-        ('\\','\\5c'),
-        ('*','\\2a'),
-        ('(','\\28'),
-        (')','\\29'),
-        ('/','\\2f'),
-        ('+','\\2b'),
-        (chr(0),'\\00')
+        ("\+", "+"),
+        ("\*", "*"),
+        ("\(", "("),
+        ("\)", ")"),
+        ("\/", "/"),
+        ("\\,", ",,"),
+        ("\\", "\\5c"),
+        ("*", "\\2a"),
+        ("(", "\\28"),
+        (")", "\\29"),
+        ("/", "\\2f"),
+        ("+", "\\2b"),
+        (chr(0), "\\00"),
     )
     for char, escape in escapes:
         path = path.replace(char, escape)
-    path = path.replace(",,","\\2c")
+    path = path.replace(",,", "\\2c")
     return path
 
-def generate_ads_path(distinguished_name, type_, server=None, port=None):
-    """Generates a proper ADsPath to be used when connecting to an active directory object or when searching active directory.
 
-    Keyword arguments:
-     - distinguished_name: DN of object or search base such as 'cn=zakir,ou=users,dc=mycompany,dc=com' (required).
-     - type: 'GC' (global-catalog) or 'LDAP' to determine what directory to be searched (required).
-     - server: FQDN of domain controller if necessary to connect to a particular server (optional unless port is defined).
-     - port: port number for directory service if not default port. If port is specified, server must be specified (optional)."""
+def generate_ads_path(
+    distinguished_name: str, type: str, server: str = None, port: int = None
+) -> str:
+    """
+    Generates a proper ADsPath to be used when connecting to an active directory object or
+    when searching active directory.
 
-    if type_ == "LDAP"  or type_ == "LDAPS":
+    :param distinguished_name: DN of object or search base such as
+        'cn=John Smith,cn=users,dc=example,dc=com'
+    :type distinguished_name: str
+    :param type: the connection type, either 'LDAP', 'LDAPS', or 'GC'
+    :type type: str
+    :param server: FQDN of domain controller if necessary to connect to a particular server,
+        defaults to the global catalog server
+    :type server: str, optional
+    :param port: port number for directory service if not default port.
+        If port is specified, server must be specified.
+    :type port: int, optional
+    :raises TypeError: Invalid type for type
+    :return: the ADsPath to be used when connecting to Active Directory
+    :rtype: str
+    """
+
+    if type == "LDAP" or type == "LDAPS":
         server = server if server else ADBase.default_ldap_server
         port = port if port else ADBase.default_ldap_port
-    elif type_ == "GC":
+    elif type == "GC":
         server = server if server else ADBase.default_gc_server
         port = port if port else ADBase.default_gc_port
     else:
-        raise Exception("Invalid type specified.")
+        raise TypeError("Invalid type specified.")
 
-    ads_path = ''.join((type_,'://'))
+    ads_path = "".join((type, "://"))
     if server:
-        ads_path = ''.join((ads_path,server))
+        ads_path = "".join((ads_path, server))
         if port:
-            ads_path = ':'.join((ads_path,str(port)))
-        ads_path = ''.join((ads_path,'/'))
-    ads_path = ''.join((ads_path,escape_path(distinguished_name)))
+            ads_path = ":".join((ads_path, str(port)))
+        ads_path = "".join((ads_path, "/"))
+    ads_path = "".join((ads_path, escape_path(distinguished_name)))
     return ads_path

@@ -10,7 +10,12 @@ from .pyadexceptions import InvalidAttribute
 from . import adsearch
 from . import pyadutils
 from .adbase import ADBase
-from .pyadconstants import ADS_AUTHENTICATION_TYPE,PYAD_CATEGORY_TYPE_OVERRIDE_MAPPPINGS,ADS_USER_FLAG
+from .pyadconstants import (
+    ADS_AUTHENTICATION_TYPE,
+    PYAD_CATEGORY_TYPE_OVERRIDE_MAPPPINGS,
+    ADS_USER_FLAG,
+)
+
 
 @total_ordering
 class ADObject(ADBase):
@@ -23,18 +28,18 @@ class ADObject(ADBase):
     _mandatory_attributes = None
     _optional_attributes = None
     _py_ad_object_mappings = {}
-    
+
     def __set_adsi_obj(self):
         """Internal method that creates the connection to the backend ADSI object."""
-    
+
         if self.default_username and self.default_password:
             # from http://msdn.microsoft.com/en-us/library/windows/desktop/aa706065(v=vs.85).aspx
             # With the LDAP provider for Active Directory, you may pass in
             # lpszUserName as one of the following strings:
-            # (1) The name of a user account, such as "jeffsmith". To use a user name 
-            # by itself, you must set only the ADS_SECURE_AUTHENTICATION flag 
+            # (1) The name of a user account, such as "jeffsmith". To use a user name
+            # by itself, you must set only the ADS_SECURE_AUTHENTICATION flag
             # in the lnReserved parameter.
-            # (2) The user path from a previous version of Windows NT, such 
+            # (2) The user path from a previous version of Windows NT, such
             # as "Fabrikam\jeffsmith".
             # (3) Distinguished Name, such as "CN=Jeff Smith, OU=Sales,
             # DC=Fabrikam,DC=Com". To use a DN, the lnReserved parameter
@@ -42,72 +47,76 @@ class ADObject(ADBase):
             # (4) User Principal Name (UPN), such as "jeffsmith@Fabrikam.com".
             # To use a UPN, you must assign the appropriate UPN value for the
             # userPrincipalName attribute of the target user object.
-            
+
             # In order to be consistent (and because troubleshooting this
             # is horrid), we're just going to force user name to be of form
             # (1) or (4) and document it. Offhand, I'm not seeing any
             # use cases where (3) would allow something not possible in
             # the combinations of options (1), or (4).
-            _ds = self.adsi_provider.getObject('', "LDAP:")
+            _ds = self.adsi_provider.getObject("", "LDAP:")
             if self.default_ldap_authentication_flag > 0:
                 flag = self.default_ldap_authentication_flag
             else:
                 # I'm choosing to force encryption of the login credentials.
                 # This does not require SSL to be configured, so I believe this
-                # should work for everyone. If not, we can change later. 
-                flag = ADS_AUTHENTICATION_TYPE['ADS_SECURE_AUTHENTICATION']
+                # should work for everyone. If not, we can change later.
+                flag = ADS_AUTHENTICATION_TYPE["ADS_SECURE_AUTHENTICATION"]
                 if self.default_ssl:
-                    flag = flag | ADS_AUTHENTICATION_TYPE['ADS_USE_ENCRYPTION']
+                    flag = flag | ADS_AUTHENTICATION_TYPE["ADS_USE_ENCRYPTION"]
             self._ldap_adsi_obj = _ds.OpenDSObject(
-                    self.__ads_path,
-                    self.default_username,
-                    self.default_password,
-                    flag)
-            
+                self.__ads_path, self.default_username, self.default_password, flag
+            )
+
         elif self.default_ssl:
-            raise Exception("Using SSL without specifying credentials is currently unsupported due to what appears to be a bug in pywin32.")
+            raise Exception(
+                "Using SSL without specifying credentials is currently unsupported due "
+                "to what appears to be a bug in pywin32."
+            )
             # from: http://msdn.microsoft.com/en-us/library/windows/desktop/aa772247(v=vs.85).aspx
             # If ADS_USE_SSL is not combined with the ADS_SECURE_AUTHENTICATION
             # flag and the supplied credentials are NULL, the bind will be
-            # performed anonymously. If ADS_USE_SSL is combined with the 
-            # ADS_SECURE_AUTHENTICATION flag and the supplied credentials 
+            # performed anonymously. If ADS_USE_SSL is combined with the
+            # ADS_SECURE_AUTHENTICATION flag and the supplied credentials
             # are NULL, then the credentials of the calling thread are used.
-            flag = ADS_AUTHENTICATION_TYPE['ADS_SECURE_AUTHENTICATION'] | \
-                            ADS_AUTHENTICATION_TYPE['ADS_USE_ENCRYPTION']
-            _ds = self.adsi_provider.getObject('', "LDAP:")
+            flag = (
+                ADS_AUTHENTICATION_TYPE["ADS_SECURE_AUTHENTICATION"]
+                | ADS_AUTHENTICATION_TYPE["ADS_USE_ENCRYPTION"]
+            )
+            _ds = self.adsi_provider.getObject("", "LDAP:")
             self._ldap_adsi_obj = _ds.OpenDSObject(
-                            self.__ads_path,
-                            None, # username
-                            None, # password
-                            flag)
+                self.__ads_path, None, None, flag  # username  # password
+            )
         else:
-            self._ldap_adsi_obj = self.adsi_provider.getObject('', self.__ads_path)
-    
+            self._ldap_adsi_obj = self.adsi_provider.getObject("", self.__ads_path)
+
     def __init__(self, distinguished_name=None, adsi_ldap_com_object=None, options={}):
         if adsi_ldap_com_object:
             self._ldap_adsi_obj = adsi_ldap_com_object
         elif distinguished_name:
             self._set_defaults(options)
-            self.__ads_path = pyadutils.generate_ads_path(distinguished_name,
-                            self.default_ldap_protocol,
-                            self.default_ldap_server,
-                            self.default_ldap_port
+            self.__ads_path = pyadutils.generate_ads_path(
+                distinguished_name,
+                self.default_ldap_protocol,
+                self.default_ldap_server,
+                self.default_ldap_port,
             )
             self.__set_adsi_obj()
         else:
-            raise Exception("Either a distinguished name or a COM object must be provided to create an ADObject")
+            raise Exception(
+                "Either a distinguished name or a COM object must be provided to create an ADObject"
+            )
 
         # by pulling the DN from object instead of what is passed in,
         # we guarantee correct capitalization
-        self.__distinguished_name = self.get_attribute('distinguishedName', False)
-        self.__object_guid = self.get_attribute('objectGUID', False)
+        self.__distinguished_name = self.get_attribute("distinguishedName", False)
+        self.__object_guid = self.get_attribute("objectGUID", False)
         if self.__object_guid is not None:
             self.__object_guid = pyadutils.convert_guid(self.__object_guid)
-        # Set pyAD Object Type        
-        occn = self.get_attribute('objectCategory',False)
+        # Set pyAD Object Type
+        occn = self.get_attribute("objectCategory", False)
         if occn:
             # pull out CN from DN
-            object_category_cn = occn.split('=',1)[1].split(",",1)[0]
+            object_category_cn = occn.split("=", 1)[1].split(",", 1)[0]
             # some object categories are not very human readable
             # so we provide the option to override
             if object_category_cn in PYAD_CATEGORY_TYPE_OVERRIDE_MAPPPINGS:
@@ -117,20 +126,20 @@ class ADObject(ADBase):
         else:
             # Sometimes you don't have access to objectCategory attribute,
             # try, with objectClass attribute
-            objClass = self.get_attribute('objectClass',True)
-            if 'domain' in objClass:
-                self._type = 'domain'
-            elif 'user' in objClass:
-                self._type = 'user'
-            elif 'organizationalUnit' in objClass:
-                self._type = 'organizationalUnit'
+            objClass = self.get_attribute("objectClass", True)
+            if "domain" in objClass:
+                self._type = "domain"
+            elif "user" in objClass:
+                self._type = "user"
+            elif "organizationalUnit" in objClass:
+                self._type = "organizationalUnit"
             else:
-                self._type = 'unknown'
+                self._type = "unknown"
 
     @classmethod
     def from_guid(cls, guid, options={}):
         "Generates ADObject based on  GUID"
-        guid = "<GUID=%s>" % guid.strip('}').strip('{')
+        guid = "<GUID=%s>" % guid.strip("}").strip("{")
         return cls.from_dn(guid, options)
 
     @classmethod
@@ -149,49 +158,62 @@ class ADObject(ADBase):
 
     def __get_prefixed_cn(self):
         prefix = None
-        if self.type == 'organizationalUnit': 
-            prefix = 'ou'
+        if self.type == "organizationalUnit":
+            prefix = "ou"
         elif self.type == "domain":
-            prefix = 'dc'
+            prefix = "dc"
         else:
-            prefix = 'cn'
-        return '='.join((prefix, self.get_attribute(prefix, False)))
+            prefix = "cn"
+        return "=".join((prefix, self.get_attribute(prefix, False)))
 
     def __get_object_sid(self):
         sid = self.objectSid
         return pyadutils.convert_sid(sid) if sid else None
 
-    dn = property(fget=lambda self: self.__distinguished_name,
-                    doc="Distinguished Name (DN) of the object")
-    prefixed_cn = property(fget=__get_prefixed_cn,
-                    doc="Prefixed CN (such as 'cn=mycomputer' or 'ou=mycontainer' of the object")
-    guid = property(fget=lambda self: self.__object_guid,
-                    doc="Object GUID of the object")
-    adsPath = property(fget=lambda self: self.__ads_path,
-                    doc="ADsPath of Active Directory object (such as 'LDAP://cn=me,...,dc=com'")
-    type = property(fget=lambda self: self._type,
-                    doc="pyAD object type (user, computer, group, organizationalUnit, domain).")
-    parent_container_path = property(fget=lambda self: self.dn.split(',',1)[1],
-                    doc="Returns the DN of the object's parent container.")
-    guid_str = property(fget=lambda self: str(self.guid)[1:-1],
-                    doc="Object GUID of the object")
-    sid = property(fget=__get_object_sid,
-                    doc='Get the SID of the Active Directory object')
+    dn = property(
+        fget=lambda self: self.__distinguished_name,
+        doc="Distinguished Name (DN) of the object",
+    )
+    prefixed_cn = property(
+        fget=__get_prefixed_cn,
+        doc="Prefixed CN (such as 'cn=mycomputer' or 'ou=mycontainer' of the object",
+    )
+    guid = property(
+        fget=lambda self: self.__object_guid, doc="Object GUID of the object"
+    )
+    adsPath = property(
+        fget=lambda self: self.__ads_path,
+        doc="ADsPath of Active Directory object (such as 'LDAP://cn=me,...,dc=com'",
+    )
+    type = property(
+        fget=lambda self: self._type,
+        doc="pyAD object type (user, computer, group, organizationalUnit, domain).",
+    )
+    parent_container_path = property(
+        fget=lambda self: self.dn.split(",", 1)[1],
+        doc="Returns the DN of the object's parent container.",
+    )
+    guid_str = property(
+        fget=lambda self: str(self.guid)[1:-1], doc="Object GUID of the object"
+    )
+    sid = property(
+        fget=__get_object_sid, doc="Get the SID of the Active Directory object"
+    )
 
     def __hash__(self):
         # guid is always unique so that we can depend on that for providing a unique hash
         return hash(self.guid)
 
     def __unicode__(self):
-        return u"<{} '{}'>".format(self.__class__.__name__, self.__distinguished_name)
+        return "<{} '{}'>".format(self.__class__.__name__, self.__distinguished_name)
 
     def __repr__(self):
         u = self.__unicode__()
         return u
-    
+
     def __eq__(self, other):
         return isinstance(other, ADObject) and self.guid == other.guid
-    
+
     def __lt__(self, other):
         # it doesn't make sense why you'd ever have to decide
         # if one GUID was larger than the other,
@@ -212,30 +234,25 @@ class ADObject(ADBase):
     def _flush(self):
         """Commits any changes to the AD object."""
         self._ldap_adsi_obj.SetInfo()
-    
+
     def flush(self):
         self._flush()
-    
+
     def __set_gc_adsi_obj(self):
         path = pyadutils.generate_ads_path(
-                        self.dn,
-                        'GC',
-                        self.default_gc_server,
-                        self.default_gc_port
+            self.dn, "GC", self.default_gc_server, self.default_gc_port
         )
         if self.default_username and self.default_password:
-            _ds = self.adsi_provider.getObject('', "LDAP:")
-            flag = ADS_AUTHENTICATION_TYPE['ADS_SECURE_AUTHENTICATION']
+            _ds = self.adsi_provider.getObject("", "LDAP:")
+            flag = ADS_AUTHENTICATION_TYPE["ADS_SECURE_AUTHENTICATION"]
             if self.default_ssl:
-                flag = flag | ADS_AUTHENTICATION_TYPE['ADS_USE_ENCRYPTION']
+                flag = flag | ADS_AUTHENTICATION_TYPE["ADS_USE_ENCRYPTION"]
             self._gc_adsi_obj = _ds.OpenDSObject(
-                    path,
-                    self.default_username,
-                    self.default_password,
-                    flag)
+                path, self.default_username, self.default_password, flag
+            )
         else:
-            self._gc_adsi_obj = self.adsi_provider.GetObject('', path)
-    
+            self._gc_adsi_obj = self.adsi_provider.GetObject("", path)
+
     def _init_global_catalog_object(self, force=False, options={}):
         """Initializes the global catalog ADSI com object to be
         used when querying the global catalog instead of the domain directly."""
@@ -245,7 +262,9 @@ class ADObject(ADBase):
 
     def _init_schema_object(self):
         if not self._schema_adsi_obj:
-            self._schema_adsi_obj = win32com.client.GetObject(self._ldap_adsi_obj.schema)
+            self._schema_adsi_obj = win32com.client.GetObject(
+                self._ldap_adsi_obj.schema
+            )
 
     def get_mandatory_attributes(self):
         """Returns a list of mandatory attributes for the particular object.
@@ -266,24 +285,26 @@ class ADObject(ADBase):
     def get_allowed_attributes(self):
         """Returns a list of allowed attributes for the particular object.
         These attributes may be defined, but are not guaranteed to be."""
-        return list(set(self.get_mandatory_attributes() + self.get_optional_attributes()))
+        return list(
+            set(self.get_mandatory_attributes() + self.get_optional_attributes())
+        )
 
-    def get_attribute(self, attribute, always_return_list=True, source='LDAP'):
+    def get_attribute(self, attribute, always_return_list=True, source="LDAP"):
         """
         get_attribute Get an attribute from the AD Object that is represented by this class
 
         Note to experienced ADSI users:
-        
-        - If an attribute is undefined, getAttribute() will return None or [] and will not 
+
+        - If an attribute is undefined, getAttribute() will return None or [] and will not
             choke on the attribute.
-        - In regards to always_return_list, True has similar behavior to getEx() whereas 
+        - In regards to always_return_list, True has similar behavior to getEx() whereas
             False is similar to Get().
 
-        :param attribute: any schema-allowed LDAP attribute (case insensitive). The attribute 
+        :param attribute: any schema-allowed LDAP attribute (case insensitive). The attribute
             does not need to be defined.
         :type attribute: str
-        :param always_return_list: if an attribute has a single value, this specifies whether 
-            to return only the value or to return a list containing the single value. 
+        :param always_return_list: if an attribute has a single value, this specifies whether
+            to return only the value or to return a list containing the single value.
             Similarly, if true, a query on an undefined attribute will return an empty list
             instead of a None object. If querying an attribute known to only contain at most
             one element, then it is easier to set to false. Otherwise, if querying a potentially
@@ -291,7 +312,7 @@ class ADObject(ADBase):
         :type always_return_list: bool, optional
         :param source: One of [LDAP,GC], defaults to 'LDAP'
         :type source: str, optional
-        :raises InvalidAttribute: The Requested attrubute doesn't exist or isn't valid for 
+        :raises InvalidAttribute: The Requested attrubute doesn't exist or isn't valid for
             this object type
         :return: a string like object or a list of strings
         :rtype: AnyStr or List[AnyStr]
@@ -301,9 +322,9 @@ class ADObject(ADBase):
             raise InvalidAttribute(self.dn, attribute)
         else:
             try:
-                if source == 'LDAP':
+                if source == "LDAP":
                     value = self._ldap_adsi_obj.GetEx(attribute)
-                elif source == 'GC':
+                elif source == "GC":
                     self._init_global_catalog_object()
                     value = self._gc_adsi_obj.GetEx(attribute)
                 if len(value) == 1 and not always_return_list:
@@ -313,10 +334,13 @@ class ADObject(ADBase):
             # this just means that the attribute doesn't have a value which
             # we imply means null instead of throwing an error..
             except pywintypes.com_error as excpt:
-                if pyadutils.interpret_com_exception(excpt)['error_constant'] == 'E_ADS_PROPERTY_NOT_FOUND':
+                if (
+                    pyadutils.interpret_com_exception(excpt)["error_constant"]
+                    == "E_ADS_PROPERTY_NOT_FOUND"
+                ):
                     return [] if always_return_list else None
                 else:
-                    pyadutils.pass_up_com_exception(excpt, {'attribute':attribute})
+                    pyadutils.pass_up_com_exception(excpt, {"attribute": attribute})
 
     def _set_attribute(self, attribute, action, new_value):
         if not hasattr(self._ldap_adsi_obj, attribute):
@@ -327,7 +351,7 @@ class ADObject(ADBase):
             except pywintypes.com_error as excpt:
                 pyadutils.pass_up_com_exception(excpt)
 
-    def clear_attribute(self, attribute, flush:bool =True):
+    def clear_attribute(self, attribute, flush: bool = True):
         """Clears (removes) the specified LDAP attribute from the object.
         Identical to setting the attribute to None or []."""
         if self.get_attribute(attribute) != []:
@@ -335,40 +359,44 @@ class ADObject(ADBase):
             if flush:
                 self._flush()
 
-    def update_attribute(self, attribute, newvalue, no_flush:bool =False):
+    def update_attribute(self, attribute, newvalue, no_flush: bool = False):
         """Updates any mutable LDAP attribute for the object. If you are adding or removing
         values from a multi-valued attribute, see append_to_attribute and remove_from_attribute."""
-        if newvalue in ((),[],None,''):
+        if newvalue in ((), [], None, ""):
             return self.clear_attribute(attribute, not no_flush)
         elif pyadutils.generate_list(newvalue) != self.get_attribute(attribute):
             self._set_attribute(attribute, 2, pyadutils.generate_list(newvalue))
             if not no_flush:
                 self._flush()
 
-    def update_attributes(self, attribute_value_dict, flush:bool =True):
+    def update_attributes(self, attribute_value_dict, flush: bool = True):
         """Updates multiple attributes in a single transaction
         attribute_value_dict should contain a dictionary of values keyed by attribute name"""
         for k, v in attribute_value_dict.items():
-            self.update_attribute(k,v,True)
+            self.update_attribute(k, v, True)
         if flush:
             self._flush()
 
-    def append_to_attribute(self, attribute, valuesToAppend, flush:bool =True):
+    def append_to_attribute(self, attribute, valuesToAppend, flush: bool = True):
         """Appends values in list valuesToAppend to the specified multi-valued attribute.
         valuesToAppend can contain a single value or a list of multiple values."""
-        difference = list(set(pyadutils.generate_list(valuesToAppend)) \
-                        - set(self.get_attribute(attribute)))
+        difference = list(
+            set(pyadutils.generate_list(valuesToAppend))
+            - set(self.get_attribute(attribute))
+        )
         if len(difference) != 0:
-            self._set_attribute(attribute,3,difference)
+            self._set_attribute(attribute, 3, difference)
             if flush:
                 self._flush()
 
-    def remove_from_attribute(self, attribute, valuesToRemove, flush:bool =True):
+    def remove_from_attribute(self, attribute, valuesToRemove, flush: bool = True):
         """Removes any values in list valuesToRemove from the specified multi-valued attribute."""
-        difference = list(set(pyadutils.generate_list(valuesToRemove)) \
-                        & set(self.get_attribute(attribute)))
+        difference = list(
+            set(pyadutils.generate_list(valuesToRemove))
+            & set(self.get_attribute(attribute))
+        )
         if len(difference) != 0:
-            self._set_attribute(attribute,4,difference)
+            self._set_attribute(attribute, 4, difference)
             if flush:
                 self._flush()
 
@@ -378,12 +406,14 @@ class ADObject(ADBase):
         Further information on these values can be found at
         http://msdn.microsoft.com/en-us/library/aa772300.aspx."""
         d = {}
-        auc = self.get_attribute('UserAccountControl',False)
+        auc = self.get_attribute("UserAccountControl", False)
         for key, value in ADS_USER_FLAG.items():
             d[key] = auc & value == value
         return d
 
-    def set_user_account_control_setting(self, userFlag:ADS_USER_FLAG, newValue:bool) -> None:
+    def set_user_account_control_setting(
+        self, userFlag: ADS_USER_FLAG, newValue: bool
+    ) -> None:
         """
         set_user_account_control_setting Sets a single setting in UserAccountControl.
 
@@ -395,27 +425,33 @@ class ADObject(ADBase):
         :type userFlag: ADS_USER_FLAG
         :param newValue: Enable or Disable the flag
         :type newValue: bool
-        :raises ValueError: If the provided userFlag is invalid or newValue is not a bool 
+        :raises ValueError: If the provided userFlag is invalid or newValue is not a bool
         """
         if userFlag not in ADS_USER_FLAG.keys():
-            raise ValueError("userFlag",userFlag,list(ADS_USER_FLAG.keys()))
-        elif not isinstance(newValue,bool):
-            raise ValueError("newValue",newValue,[True,False])
+            raise ValueError("userFlag", userFlag, list(ADS_USER_FLAG.keys()))
+        elif not isinstance(newValue, bool):
+            raise ValueError("newValue", newValue, [True, False])
         else:
             # retreive the userAccountControl as if it didn't have the flag in question set.
-            if self.get_attribute('userAccountControl',False) & ADS_USER_FLAG[userFlag] :
-                nv = self.get_attribute('userAccountControl',False) ^ ADS_USER_FLAG[userFlag]
+            if (
+                self.get_attribute("userAccountControl", False)
+                & ADS_USER_FLAG[userFlag]
+            ):
+                nv = (
+                    self.get_attribute("userAccountControl", False)
+                    ^ ADS_USER_FLAG[userFlag]
+                )
             else:
-                nv = self.get_attribute('userAccountControl',False)
+                nv = self.get_attribute("userAccountControl", False)
             # if the flag is true, then the value is present and
             # we add it to the starting point with B-OR.
             # Otherwise, if it's false, it's just not present,
             # so we leave it without any mention of the flag as in previous step.
             if newValue:
                 nv = nv | ADS_USER_FLAG[userFlag]
-            self.update_attribute('userAccountControl',nv)
+            self.update_attribute("userAccountControl", nv)
 
-    def disable(self, flush:bool =True) -> None:
+    def disable(self, flush: bool = True) -> None:
         """Disables the user or computer"""
         try:
             if self._ldap_adsi_obj.AccountDisabled == False:
@@ -425,7 +461,7 @@ class ADObject(ADBase):
         except pywintypes.com_error as excpt:
             pyadutils.pass_up_com_exception(excpt)
 
-    def enable(self, flush:bool =True):
+    def enable(self, flush: bool = True):
         """Enables the user or computer"""
         try:
             if self._ldap_adsi_obj.AccountDisabled == True:
@@ -437,7 +473,7 @@ class ADObject(ADBase):
 
     def _get_password_last_set(self) -> datetime:
         """
-        _get_password_last_set Get the last time the objects password was set
+        Get the last time the objects password was set
 
         :return: The date and time that the password was last set (default 1970-01-01)
         :rtype: datetime
@@ -445,9 +481,9 @@ class ADObject(ADBase):
         # http://www.microsoft.com/technet/scriptcenter/topics/win2003/lastlogon.mspx
         # kudos to http://docs.activestate.com/activepython/2.6/pywin32/html/com/help/active_directory.html
         try:
-            return pyadutils.convert_datetime(self.get_attribute('pwdLastSet', False))
+            return pyadutils.convert_datetime(self.get_attribute("pwdLastSet", False))
         except ValueError:
-            return datetime(1970,1,1)
+            return datetime(1970, 1, 1)
 
     def get_last_login(self) -> datetime:
         """
@@ -458,9 +494,11 @@ class ADObject(ADBase):
         """
 
         try:
-            return pyadutils.convert_datetime(self.get_attribute('lastLogonTimestamp', False))
+            return pyadutils.convert_datetime(
+                self.get_attribute("lastLogonTimestamp", False)
+            )
         except ValueError:
-            return datetime(1970,1,1)
+            return datetime(1970, 1, 1)
 
     def get_uSNChanged(self) -> int:
         """
@@ -470,8 +508,7 @@ class ADObject(ADBase):
         :rtype: int
         """
 
-        return pyadutils.convert_bigint(self.get_attribute('uSNChanged', False))
-
+        return pyadutils.convert_bigint(self.get_attribute("uSNChanged", False))
 
     def move(self, new_ou_object) -> None:
         """
@@ -484,42 +521,50 @@ class ADObject(ADBase):
         """
 
         try:
-            new_path = self.default_ldap_protocol + '://' + self.dn
+            new_path = self.default_ldap_protocol + "://" + self.dn
             new_ou_object._ldap_adsi_obj.MoveHere(new_path, self.prefixed_cn)
             new_ou_object._flush()
         except pywintypes.com_error as excpt:
             pyadutils.pass_up_com_exception(excpt)
-        new_dn = ','.join((self.prefixed_cn, new_ou_object.dn))
-        time.sleep(.5)
-        self.__ads_path = pyadutils.generate_ads_path(new_dn, self.default_ldap_protocol,
-                self.default_ldap_server, self.default_ldap_port)
+        new_dn = ",".join((self.prefixed_cn, new_ou_object.dn))
+        time.sleep(0.5)
+        self.__ads_path = pyadutils.generate_ads_path(
+            new_dn,
+            self.default_ldap_protocol,
+            self.default_ldap_server,
+            self.default_ldap_port,
+        )
         self.__set_adsi_obj()
-        self.__distinguished_name = self.get_attribute('distinguishedName', False)
+        self.__distinguished_name = self.get_attribute("distinguishedName", False)
         self.__set_gc_adsi_obj()
 
     def rename(self, new_name, set_sAMAccountName=True):
         """Renames the current object within its current organizationalUnit.
         new_name expects the new name of the object (just CN not prefixed CN or distinguishedName)."""
         parent = self.parent_container
-        if self.type == 'organizationalUnit':
-            pcn = 'ou='
+        if self.type == "organizationalUnit":
+            pcn = "ou="
         else:
-            pcn = 'cn='
+            pcn = "cn="
         pcn += new_name
         try:
-            if self.type in ('user', 'computer', 'group') and set_sAMAccountName:
-                self._ldap_adsi_obj.Put('sAMAccountName', new_name)
-            new_path = self.default_ldap_protocol+'://' + self.dn
+            if self.type in ("user", "computer", "group") and set_sAMAccountName:
+                self._ldap_adsi_obj.Put("sAMAccountName", new_name)
+            new_path = self.default_ldap_protocol + "://" + self.dn
             parent._ldap_adsi_obj.MoveHere(new_path, pcn)
             parent._flush()
         except pywintypes.com_error as excpt:
             pyadutils.pass_up_com_exception(excpt)
-        new_dn = ','.join((pcn, parent.dn))
-        time.sleep(.5)
-        self.__ads_path = pyadutils.generate_ads_path(new_dn, self.default_ldap_protocol,
-                self.default_ldap_server, self.default_ldap_port)
+        new_dn = ",".join((pcn, parent.dn))
+        time.sleep(0.5)
+        self.__ads_path = pyadutils.generate_ads_path(
+            new_dn,
+            self.default_ldap_protocol,
+            self.default_ldap_server,
+            self.default_ldap_port,
+        )
         self.__set_adsi_obj()
-        self.__distinguishedName = self.get_attribute('distinguishedName', False)
+        self.__distinguishedName = self.get_attribute("distinguishedName", False)
         self.__set_gc_adsi_obj()
 
     def add_to_group(self, group):
@@ -532,19 +577,21 @@ class ADObject(ADBase):
         group expects an ADGroup object to which the current object belongs."""
         group.remove_members(self)
 
-    def set_managedby(self, user, flush:bool =True):
+    def set_managedby(self, user, flush: bool = True):
         """Sets managedBy on object to the specified user"""
         if user:
-            assert user.__class__.__str__ == 'ADUser'
-            self.update_attribute('managedBy', user.dn,no_flush=(not flush))
+            assert user.__class__.__str__ == "ADUser"
+            self.update_attribute("managedBy", user.dn, no_flush=(not flush))
         else:
-            self.clear_attribute('managedBy',flush=flush)
+            self.clear_attribute("managedBy", flush=flush)
 
     def clear_managedby(self):
         """Sets object to be managedBy nobody"""
         return self.set_managedby(None)
 
-    def dump_to_xml(self, whitelist_attributes:list =[], blacklist_attributes:list =[]):
+    def dump_to_xml(
+        self, whitelist_attributes: list = [], blacklist_attributes: list = []
+    ):
         """
         dump_to_xml Dumps object and all human-readable attributes to an xml document which is returned as a string.
 
@@ -562,41 +609,53 @@ class ADObject(ADBase):
 
         doc = minidom.Document()
         adobj_xml_doc = doc.createElement("ADObject")
-        adobj_xml_doc.setAttribute("objectGUID", str(self.guid).lstrip('{').rstrip('}'))
+        adobj_xml_doc.setAttribute("objectGUID", str(self.guid).lstrip("{").rstrip("}"))
         adobj_xml_doc.setAttribute("pyADType", self.type)
         doc.appendChild(adobj_xml_doc)
 
         for attribute in attributes:
             node = doc.createElement("attribute")
             node.setAttribute("name", attribute)
-            value = self.get_attribute(attribute,False)
-            if str(type(value)).split("'",2)[1] not in ('buffer','instance') and value is not None:
+            value = self.get_attribute(attribute, False)
+            if (
+                str(type(value)).split("'", 2)[1] not in ("buffer", "instance")
+                and value is not None
+            ):
                 if type(value) is not list:
                     try:
-                        ok_elem=True
-                        node.setAttribute("type", str(type(value)).split("'",2)[1])
+                        ok_elem = True
+                        node.setAttribute("type", str(type(value)).split("'", 2)[1])
                         try:
                             text = doc.createTextNode(str(value))
                         except:
-                            text = doc.createTextNode(value.encode("latin-1", 'replace'))
+                            text = doc.createTextNode(
+                                value.encode("latin-1", "replace")
+                            )
                         node.appendChild(text)
                     except:
-                        print('attribute: %s not xml-able' % attribute)
+                        print("attribute: %s not xml-able" % attribute)
                 else:
                     node.setAttribute("type", "multiValued")
                     ok_elem = False
                     try:
                         for item in value:
-                            if str(type(item)).split("'",2)[1] not in ('buffer','instance') and value is not None:
+                            if (
+                                str(type(item)).split("'", 2)[1]
+                                not in ("buffer", "instance")
+                                and value is not None
+                            ):
                                 valnode = doc.createElement("value")
-                                valnode.setAttribute("type", str(type(item)).split("'",2)[1])
+                                valnode.setAttribute(
+                                    "type", str(type(item)).split("'", 2)[1]
+                                )
                                 text = doc.createTextNode(str(item))
                                 valnode.appendChild(text)
                                 node.appendChild(valnode)
-                                ok_elem=True
+                                ok_elem = True
                     except:
-                        print('attribute: %s not xml-able' % attribute)
-                if ok_elem: adobj_xml_doc.appendChild(node)
+                        print("attribute: %s not xml-able" % attribute)
+                if ok_elem:
+                    adobj_xml_doc.appendChild(node)
         return doc.toxml(encoding="UTF-8")
 
     def adjust_pyad_type(self):
@@ -604,16 +663,21 @@ class ADObject(ADBase):
             self.__class__ = self._py_ad_object_mappings[self.type]
 
     def __get_parent_container(self):
-        q = ADObject.from_dn(self.parent_container_path,
-                options = self._make_options())
+        q = ADObject.from_dn(self.parent_container_path, options=self._make_options())
         q.adjust_pyad_type()
         return q
-    parent_container = property(__get_parent_container, doc="Object representing the container in which this object lives")
+
+    parent_container = property(
+        __get_parent_container,
+        doc="Object representing the container in which this object lives",
+    )
 
     def delete(self):
         """Deletes the object from the domain"""
         parent = self.parent_container
         if not parent:
-            raise Exception("Object does not have a parent container. Cannot be deleted")
+            raise Exception(
+                "Object does not have a parent container. Cannot be deleted"
+            )
         else:
             parent.remove_child(self)
