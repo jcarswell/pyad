@@ -1,3 +1,9 @@
+0.6.1 / 2022-06-18 / Josh Carswell
+
+	Bug fixes in ADQuery
+	ADQuery now operates more like a dictionary object
+	Formatted Black
+
 0.5.03 / 2013-7-7 / Zakir Durumeric, Alex Kavanaugh, nifhell
 
 	feature request: connections to Active Directory now be made with alternate credentials
