@@ -22,15 +22,19 @@ class ADQuery(ADBase):
         if unspecified, the default domain will be used ("DC=example,DC=com")
 
     search_scope: The scope of the search. Must be one of "subtree", "onelevel", or "base",
+
         - subtree: searches the entire subtree of the base_dn (default)
+
             If you are looking for users with a specific attribute value, using this will
             return all users with that attribute value that exist under the provided
             base_dn.
         - onelevel: searches the immediate children of the base_dn
+
             If you are looking for users with a specific attribute value, using this will
             return only users with that attribute value that exist directly under the
             current base_dn.
         - base: searches only the base_dn
+
             If you are looking for users with a specific attribute value, using this will
             only return a user if you specify that users distinguished name as the base_dn.
 
@@ -38,9 +42,9 @@ class ADQuery(ADBase):
         return distinguished names that have the samaccountname of jdoe.
         multiple filters can be combined using the AND or OR operator and prefixed with NOT.
 
-        For example:
-            "samaccountname='jdoe' OR samaccountname='jsmith' AND objectClass='person'"
+        For example: "samaccountname='jdoe' OR samaccountname='jsmith' AND objectClass='person'"
         will return results that have the samaccountname of jdoe or jsmith and are a person.
+
     """
 
     # Requests secure authentication. When this flag is set,
