@@ -41,17 +41,34 @@ def validate_credentials(
         return None
 
 
-def convert_error_code(error_code):
+def convert_error_code(error_code: int) -> int:
     """
     Convert error code from the format returned by pywin32 to the format that Microsoft
     documents everything in.
+
+    :param error_code: error code
+    :type error_code: int
+    :return: The error code in the format Microsoft documents it
+    :rtype: int
     """
 
     return error_code % 2**32
 
 
-# expects the actually pywintypes.com_error exception that's thrown...
-def interpret_com_exception(excp, additional_info={}):
+def interpret_com_exception(
+    excp: "pywintype.com_error", additional_info: dict = {}
+) -> dict:
+    """
+    Convert a pywin32 com_error exception into a dictionary of error information.
+
+    :param excp: pywin32 com_error exception
+    :type excp: pywintype.com_error
+    :param additional_info: any additional information with the error, defaults to {}
+    :type additional_info: dict, optional
+    :return: a dictionary of error information
+    :rtype: dict
+    """
+
     d = {}
     d["error_num"] = convert_error_code(excp.args[2][5])
     # for some reason hex() includes the L for long in the hex...
@@ -87,7 +104,18 @@ def interpret_com_exception(excp, additional_info={}):
     return d
 
 
-def pass_up_com_exception(excp, additional_info={}):
+def pass_up_com_exception(excp: "pywintype.com_error", additional_info: dict = {}):
+    """
+    reparse the com_error into a sane exception and raise it.
+
+    :param excp: the com_error exception
+    :type excp: pywintype.com_error
+    :param additional_info: Additional exception details, defaults to {}
+    :type additional_info: dict, optional
+    :raises excp: if we don't know how to handle the exception raise the original
+        exception
+    """
+
     if excp.__class__ in (genericADSIException, comException, win32Exception):
         raise excp
     else:
@@ -110,9 +138,14 @@ def pass_up_com_exception(excp, additional_info={}):
 
 
 def convert_datetime(adsi_time_com_obj):
-    """Converts 64-bit integer COM object representing time into a python datetime object."""
-    # credit goes to John Nielsen who documented this at
-    # http://docs.activestate.com/activepython/2.6/pywin32/html/com/help/active_directory.html.
+    """
+    Converts 64-bit integer COM object representing time into
+    a python datetime object.
+
+    Credit goes to John Nielsen who documented this at
+    `<http://docs.activestate.com/activepython/2.6/pywin32/html/com/help/active_directory.html>`_.
+    """
+
     if not hasattr(adsi_time_com_obj, "highpart") or not hasattr(
         adsi_time_com_obj, "lowpart"
     ):
@@ -133,19 +166,38 @@ def convert_datetime(adsi_time_com_obj):
     return datetime.datetime.fromtimestamp(date_value)
 
 
-def convert_bigint(obj):
-    # based on http://www.selfadsi.org/ads-attributes/user-usnChanged.htm
+def convert_bigint(obj) -> int:
+    """
+    Converts a ADSI time object to an integer.
+
+    based on http://www.selfadsi.org/ads-attributes/user-usnChanged.htm
+
+    :param obj: the AD bigint object
+    :raises AttributeError: invalid object type
+    :return: the decimal value of the object
+    :rtype: int
+    """
+
     if hasattr(obj, "HighPart") and hasattr(obj, "LowPart"):
         h, l = obj.HighPart, obj.LowPart
         if l < 0:
             h += 1
         return (h << 32) + l
     else:
-        raise ValueError(f"Expected adsi time object got '{obj.__class__.__name__}'")
+        raise AttributeError(
+            f"Expected adsi time object got '{obj.__class__.__name__}'"
+        )
 
 
-def convert_timespan(obj):
-    """Converts COM object representing time span to a python time span object."""
+def convert_timespan(obj) -> datetime.timedelta:
+    """
+    Converts COM object representing time span to a python time span object.
+
+    :param obj: ADSI time span object
+    :return: the python timedelta object
+    :rtype: datetime.timedelta
+    """
+
     as_seconds = (
         abs(convert_bigint(obj)) / 10000000
     )  # number of 100 nanoseconds in a second
@@ -160,7 +212,17 @@ def convert_sid(sid_object):
     return pywintypes.SID(bytes(sid_object))
 
 
-def generate_list(input):
+def generate_list(input) -> list:
+    """
+    converts a set or tuple to a list or returns the input in a list if it is not
+    a list.
+
+    :param input: a list like object or any
+    :type input: list, set, tuple, Any
+    :return: a list
+    :rtype: list
+    """
+
     if type(input) is list:
         return input
     elif type(input) in (set, tuple):
@@ -171,7 +233,16 @@ def generate_list(input):
         ]
 
 
-def escape_path(path):
+def escape_path(path: str) -> str:
+    """
+    escapes a path for use in ADSI.
+
+    :param path: the raw path to escape
+    :type path: str
+    :return: the escaped path
+    :rtype: str
+    """
+
     escapes = (
         ("\+", "+"),
         ("\*", "*"),
