@@ -231,6 +231,37 @@ class ADObject(ADBase):
         else:
             raise AttributeError(attribute)
 
+    def __getitem__(self, key: str):
+        """
+        Get an attribute from the ADObject attributes.
+
+        :param key: The attribute name to retrieve
+        :type key: str
+        :raises AttributeError: if the key does not exist
+        :return: The value of the attribute
+        """
+
+        if hasattr(self._ldap_adsi_obj, key):
+            return self.get_attribute(key, False)
+        else:
+            raise AttributeError(key)
+
+    def __setitem__(self, key: str, value):
+        """
+        Set an attribute on the ADObject.
+
+        :param key: The attribute name to set
+        :type key: str
+        :param value: The value to set the attribute to
+        :type value: Any
+        :raises AttributeError: if the key does not exist
+        """
+
+        if hasattr(self._ldap_adsi_obj, key):
+            self.update_attribute(key, value)
+        else:
+            raise AttributeError(key)
+
     def _flush(self):
         """Commits any changes to the AD object."""
         self._ldap_adsi_obj.SetInfo()
