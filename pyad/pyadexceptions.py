@@ -46,14 +46,18 @@ class InvalidObjectException(noObjectFoundException, win32Exception):
 class InvalidAttribute(BaseException, AttributeError):
     def __str__(self):
         return (
-            'The attribute "%s" is not permitted by the schema definition of the object "%s" (the requested attribute does not exist).'
+            'The attribute "%s" is not permitted by the schema definition of the '
+            'object "%s" (the requested attribute does not exist).'
             % (self.attribute, self.obj)
         )
 
 
 class noExecutedQuery(BaseException):
     def __str__(self):
-        return "No query has been executed. Therefore there are no results to return. Execute a query before requesting results."
+        return (
+            "No query has been executed. Therefore there are no results to return. "
+            "Execute a query before requesting results."
+        )
 
 
 class invalidResults(BaseException):
@@ -62,8 +66,8 @@ class invalidResults(BaseException):
 
     def __str__(self):
         return (
-            "The specified query returned %i results. getSingleResults only functions with a single result."
-            % self.number_results
+            "The specified query returned %i results. getSingleResults only functions "
+            "with a single result." % self.number_results
         )
 
 
