@@ -1,3 +1,16 @@
+0.6.2 / 2022-07-04 / Josh Carswell
+
+	AD object creation functions clean themselves up when an error is encounter during creation.
+	ADUser create should only set the "PASSWD_NOTREQD" flag if the password is set during creation.
+	ADObjects now support dict like access to attributes
+	|
+	|	ADUser.from_cn("Josh Carswell")["displayName"] = "Record Update"
+	| 	ADUser.from_cn("Josh Carswell")["displayName"] -> "Record Update"
+	|		# is functionally equivalent to
+	|	ADUser.from_cn("Josh Carswell").set_attribute("displayName","Record Update")
+	|	ADUser.from_cn("Josh Carswell").get_attribute("displayName") -> "Record Update"
+	|
+
 0.6.1 / 2022-06-18 / Josh Carswell
 
 	Bug fixes in ADQuery

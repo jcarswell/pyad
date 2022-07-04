@@ -81,17 +81,34 @@
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="convert_error_code"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.convert_error_code">[docs]</a><span class="k">def</span> <span class="nf">convert_error_code</span><span class="p">(</span><span class="n">error_code</span><span class="p">):</span>
+<div class="viewcode-block" id="convert_error_code"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.convert_error_code">[docs]</a><span class="k">def</span> <span class="nf">convert_error_code</span><span class="p">(</span><span class="n">error_code</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert error code from the format returned by pywin32 to the format that Microsoft</span>
 <span class="sd">    documents everything in.</span>
+
+<span class="sd">    :param error_code: error code</span>
+<span class="sd">    :type error_code: int</span>
+<span class="sd">    :return: The error code in the format Microsoft documents it</span>
+<span class="sd">    :rtype: int</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">return</span> <span class="n">error_code</span> <span class="o">%</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span></div>
 
 
-<span class="c1"># expects the actually pywintypes.com_error exception that&#39;s thrown...</span>
-<div class="viewcode-block" id="interpret_com_exception"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.interpret_com_exception">[docs]</a><span class="k">def</span> <span class="nf">interpret_com_exception</span><span class="p">(</span><span class="n">excp</span><span class="p">,</span> <span class="n">additional_info</span><span class="o">=</span><span class="p">{}):</span>
+<div class="viewcode-block" id="interpret_com_exception"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.interpret_com_exception">[docs]</a><span class="k">def</span> <span class="nf">interpret_com_exception</span><span class="p">(</span>
+    <span class="n">excp</span><span class="p">:</span> <span class="s2">&quot;pywintype.com_error&quot;</span><span class="p">,</span> <span class="n">additional_info</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a pywin32 com_error exception into a dictionary of error information.</span>
+
+<span class="sd">    :param excp: pywin32 com_error exception</span>
+<span class="sd">    :type excp: pywintype.com_error</span>
+<span class="sd">    :param additional_info: any additional information with the error, defaults to {}</span>
+<span class="sd">    :type additional_info: dict, optional</span>
+<span class="sd">    :return: a dictionary of error information</span>
+<span class="sd">    :rtype: dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">d</span><span class="p">[</span><span class="s2">&quot;error_num&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert_error_code</span><span class="p">(</span><span class="n">excp</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">5</span><span class="p">])</span>
     <span class="c1"># for some reason hex() includes the L for long in the hex...</span>
@@ -127,7 +144,18 @@
     <span class="k">return</span> <span class="n">d</span></div>
 
 
-<div class="viewcode-block" id="pass_up_com_exception"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.pass_up_com_exception">[docs]</a><span class="k">def</span> <span class="nf">pass_up_com_exception</span><span class="p">(</span><span class="n">excp</span><span class="p">,</span> <span class="n">additional_info</span><span class="o">=</span><span class="p">{}):</span>
+<div class="viewcode-block" id="pass_up_com_exception"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.pass_up_com_exception">[docs]</a><span class="k">def</span> <span class="nf">pass_up_com_exception</span><span class="p">(</span><span class="n">excp</span><span class="p">:</span> <span class="s2">&quot;pywintype.com_error&quot;</span><span class="p">,</span> <span class="n">additional_info</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    reparse the com_error into a sane exception and raise it.</span>
+
+<span class="sd">    :param excp: the com_error exception</span>
+<span class="sd">    :type excp: pywintype.com_error</span>
+<span class="sd">    :param additional_info: Additional exception details, defaults to {}</span>
+<span class="sd">    :type additional_info: dict, optional</span>
+<span class="sd">    :raises excp: if we don&#39;t know how to handle the exception raise the original</span>
+<span class="sd">        exception</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="n">excp</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">in</span> <span class="p">(</span><span class="n">genericADSIException</span><span class="p">,</span> <span class="n">comException</span><span class="p">,</span> <span class="n">win32Exception</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">excp</span>
     <span class="k">else</span><span class="p">:</span>
@@ -150,9 +178,14 @@
 
 
 <div class="viewcode-block" id="convert_datetime"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.convert_datetime">[docs]</a><span class="k">def</span> <span class="nf">convert_datetime</span><span class="p">(</span><span class="n">adsi_time_com_obj</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Converts 64-bit integer COM object representing time into a python datetime object.&quot;&quot;&quot;</span>
-    <span class="c1"># credit goes to John Nielsen who documented this at</span>
-    <span class="c1"># http://docs.activestate.com/activepython/2.6/pywin32/html/com/help/active_directory.html.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts 64-bit integer COM object representing time into</span>
+<span class="sd">    a python datetime object.</span>
+
+<span class="sd">    Credit goes to John Nielsen who documented this at</span>
+<span class="sd">    `&lt;http://docs.activestate.com/activepython/2.6/pywin32/html/com/help/active_directory.html&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">adsi_time_com_obj</span><span class="p">,</span> <span class="s2">&quot;highpart&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span>
         <span class="n">adsi_time_com_obj</span><span class="p">,</span> <span class="s2">&quot;lowpart&quot;</span>
     <span class="p">):</span>
@@ -173,19 +206,38 @@
     <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">date_value</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="convert_bigint"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.convert_bigint">[docs]</a><span class="k">def</span> <span class="nf">convert_bigint</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-    <span class="c1"># based on http://www.selfadsi.org/ads-attributes/user-usnChanged.htm</span>
+<div class="viewcode-block" id="convert_bigint"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.convert_bigint">[docs]</a><span class="k">def</span> <span class="nf">convert_bigint</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a ADSI time object to an integer.</span>
+
+<span class="sd">    based on http://www.selfadsi.org/ads-attributes/user-usnChanged.htm</span>
+
+<span class="sd">    :param obj: the AD bigint object</span>
+<span class="sd">    :raises AttributeError: invalid object type</span>
+<span class="sd">    :return: the decimal value of the object</span>
+<span class="sd">    :rtype: int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;HighPart&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;LowPart&quot;</span><span class="p">):</span>
         <span class="n">h</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">HighPart</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">LowPart</span>
         <span class="k">if</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">h</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span><span class="p">)</span> <span class="o">+</span> <span class="n">l</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected adsi time object got &#39;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Expected adsi time object got &#39;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+        <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="convert_timespan"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.convert_timespan">[docs]</a><span class="k">def</span> <span class="nf">convert_timespan</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Converts COM object representing time span to a python time span object.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="convert_timespan"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.convert_timespan">[docs]</a><span class="k">def</span> <span class="nf">convert_timespan</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts COM object representing time span to a python time span object.</span>
+
+<span class="sd">    :param obj: ADSI time span object</span>
+<span class="sd">    :return: the python timedelta object</span>
+<span class="sd">    :rtype: datetime.timedelta</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">as_seconds</span> <span class="o">=</span> <span class="p">(</span>
         <span class="nb">abs</span><span class="p">(</span><span class="n">convert_bigint</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span> <span class="o">/</span> <span class="mi">10000000</span>
     <span class="p">)</span>  <span class="c1"># number of 100 nanoseconds in a second</span>
@@ -200,7 +252,17 @@
     <span class="k">return</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">SID</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">sid_object</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="generate_list"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.generate_list">[docs]</a><span class="k">def</span> <span class="nf">generate_list</span><span class="p">(</span><span class="nb">input</span><span class="p">):</span>
+<div class="viewcode-block" id="generate_list"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.generate_list">[docs]</a><span class="k">def</span> <span class="nf">generate_list</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    converts a set or tuple to a list or returns the input in a list if it is not</span>
+<span class="sd">    a list.</span>
+
+<span class="sd">    :param input: a list like object or any</span>
+<span class="sd">    :type input: list, set, tuple, Any</span>
+<span class="sd">    :return: a list</span>
+<span class="sd">    :rtype: list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">input</span>
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">set</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
@@ -211,7 +273,16 @@
         <span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="escape_path"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.escape_path">[docs]</a><span class="k">def</span> <span class="nf">escape_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="escape_path"><a class="viewcode-back" href="../../utils.html#pyad.pyadutils.escape_path">[docs]</a><span class="k">def</span> <span class="nf">escape_path</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    escapes a path for use in ADSI.</span>
+
+<span class="sd">    :param path: the raw path to escape</span>
+<span class="sd">    :type path: str</span>
+<span class="sd">    :return: the escaped path</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">escapes</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">(</span><span class="s2">&quot;\+&quot;</span><span class="p">,</span> <span class="s2">&quot;+&quot;</span><span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;\*&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">),</span>

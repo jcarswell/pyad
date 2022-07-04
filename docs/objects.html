@@ -663,37 +663,111 @@ members from the group.</p>
 <dd><p>Bases: <a class="reference internal" href="#pyad.adobject.ADObject" title="pyad.adobject.ADObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyad.adobject.ADObject</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyad.adcontainer.ADContainer.create_computer">
-<span class="sig-name descname"><span class="pre">create_computer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_computer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.create_computer" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">create_computer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyad.adcomputer.ADComputer" title="pyad.adcomputer.ADComputer"><span class="pre">pyad.adcomputer.ADComputer</span></a></span></span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_computer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.create_computer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new computer object in the container</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The computer name</p></li>
+<li><p><strong>enable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the computer should be enabled or disabled,
+defaults to True</p></li>
+<li><p><strong>optional_attributes</strong> (<em>Dict</em><em>[</em><em>str</em><em>,</em><em>Any</em><em>]</em><em>, </em><em>optional</em>) – Additional attributes to set when creating the
+object, defaults to {}</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the created computer object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyad.adcomputer.ADComputer" title="pyad.adcomputer.ADComputer">ADComputer</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyad.adcontainer.ADContainer.create_container">
-<span class="sig-name descname"><span class="pre">create_container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_container"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.create_container" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">create_container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyad.adcontainer.ADContainer" title="pyad.adcontainer.ADContainer"><span class="pre">pyad.adcontainer.ADContainer</span></a></span></span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_container"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.create_container" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new organizational unit in the container</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the container</p></li>
+<li><p><strong>optional_attributes</strong> (<em>Dict</em><em>[</em><em>str</em><em>,</em><em>Any</em><em>]</em><em>, </em><em>optional</em>) – Additional attributes to set when creating the
+object, defaults to {}</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the created container object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyad.adcontainer.ADContainer" title="pyad.adcontainer.ADContainer">ADContainer</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyad.adcontainer.ADContainer.create_group">
-<span class="sig-name descname"><span class="pre">create_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_enabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'GLOBAL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.create_group" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">create_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'GLOBAL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyad.adgroup.ADGroup" title="pyad.adgroup.ADGroup"><span class="pre">pyad.adgroup.ADGroup</span></a></span></span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.create_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new group object in the container</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The Group Name</p></li>
+<li><p><strong>security_enabled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If this is a security enabled group or a distribution
+group, defaults to True</p></li>
+<li><p><strong>scope</strong> (<em>str</em><em>, </em><em>optional</em>) – The scope of group. Must be one of [GLOBAL, LOCAL, UNIVERSAL].
+Defaults to “GLOBAL”</p></li>
+<li><p><strong>optional_attributes</strong> (<em>Dict</em><em>[</em><em>str</em><em>,</em><em>Any</em><em>]</em><em>, </em><em>optional</em>) – Additional attributes to set when creating the
+object, defaults to {}</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The created group object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyad.adgroup.ADGroup" title="pyad.adgroup.ADGroup">ADGroup</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyad.adcontainer.ADContainer.create_user">
-<span class="sig-name descname"><span class="pre">create_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upn_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.create_user" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new user object in the container</p>
+<span class="sig-name descname"><span class="pre">create_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upn_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyad.aduser.ADUser" title="pyad.aduser.ADUser"><span class="pre">pyad.aduser.ADUser</span></a></span></span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.create_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.create_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new user object in the container.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the user</p></li>
+<li><p><strong>password</strong> (<em>str</em><em>, </em><em>optional</em>) – The password for the user it is strongly recommended to
+populate this parameter as the account will be created with password
+not required which will not get clear within AD leading to a security
+vulnerability.</p></li>
+<li><p><strong>upn_suffix</strong> (<em>str</em><em>, </em><em>optional</em>) – The upn suffix for the user, defaults to default upn
+suffix for the domain.</p></li>
+<li><p><strong>enable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the user should be enabled or disabled, defaults to True</p></li>
+<li><p><strong>optional_attributes</strong> (<em>dict</em><em>, </em><em>optional</em>) – List of additional attribute to set, defaults to {}</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the created user object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyad.aduser.ADUser" title="pyad.aduser.ADUser">ADUser</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyad.adcontainer.ADContainer.get_children">
-<span class="sig-name descname"><span class="pre">get_children</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.get_children"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.get_children" title="Permalink to this definition">¶</a></dt>
-<dd><p>Iterate over the children objects in the container.</p>
+<span class="sig-name descname"><span class="pre">get_children</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyad.adobject.ADObject" title="pyad.adobject.ADObject"><span class="pre">pyad.adobject.ADObject</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.get_children"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a list of child containers with in the current container. Optionally
+the list can be filtered to specific object classes and search through child
+containers recursively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>recursive</strong> (<em>bool</em><em>, </em><em>optional</em>) – include children from sub-containers, defaults to False</p></li>
-<li><p><strong>filter</strong> (<em>object</em><em>, </em><em>optional</em>) – filter to only specific object classes ie ADUser, defaults to None</p></li>
+<li><p><strong>filter</strong> (<em>List</em><em>[</em><a class="reference internal" href="#pyad.adobject.ADObject" title="pyad.adobject.ADObject"><em>ADObject</em></a><em>]</em><em>, </em><em>optional</em>) – filter to only specific object classes ie ADUser, defaults to None</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -706,8 +780,30 @@ members from the group.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyad.adcontainer.ADContainer.get_children_iter">
+<span class="sig-name descname"><span class="pre">get_children_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyad.adobject.ADObject" title="pyad.adobject.ADObject"><span class="pre">pyad.adobject.ADObject</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyad.adobject.ADObject" title="pyad.adobject.ADObject"><span class="pre">pyad.adobject.ADObject</span></a></span></span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.get_children_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.get_children_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over the children objects in the container.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>recursive</strong> (<em>bool</em><em>, </em><em>optional</em>) – enumerate all containers with in the object,
+defaults to False</p></li>
+<li><p><strong>filter</strong> (<em>List</em><em>[</em><a class="reference internal" href="#pyad.adobject.ADObject" title="pyad.adobject.ADObject"><em>ADObject</em></a><em>]</em><em>, </em><em>optional</em>) – filter to only specific object classes ie ADUser,
+defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yield</dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyad.adcontainer.ADContainer.remove_child">
-<span class="sig-name descname"><span class="pre">remove_child</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">child</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.remove_child"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.remove_child" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">remove_child</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">child</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyad.adobject.ADObject" title="pyad.adobject.ADObject"><span class="pre">pyad.adobject.ADObject</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyad/adcontainer.html#ADContainer.remove_child"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyad.adcontainer.ADContainer.remove_child" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes the child object from the domain</p>
 </dd></dl>
 

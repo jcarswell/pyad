@@ -40,6 +40,7 @@
   <h1>Source code for pyad.adcontainer</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">pywintypes</span>
 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 <span class="kn">from</span> <span class="nn">.adobject</span> <span class="kn">import</span> <span class="n">ADObject</span>
 <span class="kn">from</span> <span class="nn">.aduser</span> <span class="kn">import</span> <span class="n">ADUser</span>
 <span class="kn">from</span> <span class="nn">.adcomputer</span> <span class="kn">import</span> <span class="n">ADComputer</span>
@@ -49,7 +50,21 @@
 
 
 <div class="viewcode-block" id="ADContainer"><a class="viewcode-back" href="../../objects.html#pyad.adcontainer.ADContainer">[docs]</a><span class="k">class</span> <span class="nc">ADContainer</span><span class="p">(</span><span class="n">ADObject</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">get_children_iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ADContainer.get_children_iter"><a class="viewcode-back" href="../../objects.html#pyad.adcontainer.ADContainer.get_children_iter">[docs]</a>    <span class="k">def</span> <span class="nf">get_children_iter</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="nb">filter</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ADObject</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ADObject</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Iterate over the children objects in the container.</span>
+
+<span class="sd">        :param recursive: enumerate all containers with in the object,</span>
+<span class="sd">            defaults to False</span>
+<span class="sd">        :type recursive: bool, optional</span>
+<span class="sd">        :param filter: filter to only specific object classes ie ADUser,</span>
+<span class="sd">            defaults to None</span>
+<span class="sd">        :type filter: List[ADObject], optional</span>
+<span class="sd">        :yield: _description_</span>
+<span class="sd">        :rtype: _type_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">com_object</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ldap_adsi_obj</span><span class="p">:</span>
             <span class="n">q</span> <span class="o">=</span> <span class="n">ADObject</span><span class="o">.</span><span class="n">from_com_object</span><span class="p">(</span><span class="n">com_object</span><span class="p">)</span>
             <span class="n">q</span><span class="o">.</span><span class="n">adjust_pyad_type</span><span class="p">()</span>
@@ -58,30 +73,61 @@
                     <span class="k">if</span> <span class="ow">not</span> <span class="nb">filter</span> <span class="ow">or</span> <span class="n">c</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">:</span>
                         <span class="k">yield</span> <span class="n">c</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">filter</span> <span class="ow">or</span> <span class="n">q</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">:</span>
-                <span class="k">yield</span> <span class="n">q</span>
+                <span class="k">yield</span> <span class="n">q</span></div>
 
-<div class="viewcode-block" id="ADContainer.get_children"><a class="viewcode-back" href="../../objects.html#pyad.adcontainer.ADContainer.get_children">[docs]</a>    <span class="k">def</span> <span class="nf">get_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<div class="viewcode-block" id="ADContainer.get_children"><a class="viewcode-back" href="../../objects.html#pyad.adcontainer.ADContainer.get_children">[docs]</a>    <span class="k">def</span> <span class="nf">get_children</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="nb">filter</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ADObject</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Iterate over the children objects in the container.</span>
+<span class="sd">        returns a list of child containers with in the current container. Optionally</span>
+<span class="sd">        the list can be filtered to specific object classes and search through child</span>
+<span class="sd">        containers recursively.</span>
 
 <span class="sd">        :param recursive: include children from sub-containers, defaults to False</span>
 <span class="sd">        :type recursive: bool, optional</span>
 <span class="sd">        :param filter: filter to only specific object classes ie ADUser, defaults to None</span>
-<span class="sd">        :type filter: object, optional</span>
+<span class="sd">        :type filter: List[ADObject], optional</span>
 <span class="sd">        :return: a list of all child objects</span>
 <span class="sd">        :rtype: list</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_children_iter</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">))</span></div>
 
-    <span class="k">def</span> <span class="nf">__create_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__create_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">type_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ADObject</span><span class="p">:</span>
         <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;ou&quot;</span> <span class="k">if</span> <span class="n">type_</span> <span class="o">==</span> <span class="s2">&quot;organizationalUnit&quot;</span> <span class="k">else</span> <span class="s2">&quot;cn&quot;</span>
         <span class="n">prefixed_name</span> <span class="o">=</span> <span class="s2">&quot;=&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">prefix</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ldap_adsi_obj</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">type_</span><span class="p">,</span> <span class="n">prefixed_name</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ADContainer.create_user"><a class="viewcode-back" href="../../objects.html#pyad.adcontainer.ADContainer.create_user">[docs]</a>    <span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">upn_suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">enable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional_attributes</span><span class="o">=</span><span class="p">{}</span>
-    <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a new user object in the container&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">password</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">upn_suffix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">optional_attributes</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ADUser</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new user object in the container.</span>
+
+<span class="sd">        :param name: The name of the user</span>
+<span class="sd">        :type name: str</span>
+<span class="sd">        :param password: The password for the user it is strongly recommended to</span>
+<span class="sd">            populate this parameter as the account will be created with password</span>
+<span class="sd">            not required which will not get clear within AD leading to a security</span>
+<span class="sd">            vulnerability.</span>
+<span class="sd">        :type password: str, optional</span>
+<span class="sd">        :param upn_suffix: The upn suffix for the user, defaults to default upn</span>
+<span class="sd">            suffix for the domain.</span>
+<span class="sd">        :type upn_suffix: str, optional</span>
+<span class="sd">        :param enable: Whether the user should be enabled or disabled, defaults to True</span>
+<span class="sd">        :type enable: bool, optional</span>
+<span class="sd">        :param optional_attributes: List of additional attribute to set, defaults to {}</span>
+<span class="sd">        :type optional_attributes: dict, optional</span>
+<span class="sd">        :return: the created user object</span>
+<span class="sd">        :rtype: ADUser</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pyadobj</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">upn_suffix</span><span class="p">:</span>
@@ -92,21 +138,49 @@
             <span class="n">obj</span><span class="o">.</span><span class="n">Put</span><span class="p">(</span><span class="s2">&quot;userPrincipalName&quot;</span><span class="p">,</span> <span class="n">upn</span><span class="p">)</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">SetInfo</span><span class="p">()</span>
             <span class="n">pyadobj</span> <span class="o">=</span> <span class="n">ADUser</span><span class="o">.</span><span class="n">from_com_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="n">enable</span><span class="p">:</span>
                 <span class="n">pyadobj</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+
             <span class="k">if</span> <span class="n">password</span><span class="p">:</span>
                 <span class="n">pyadobj</span><span class="o">.</span><span class="n">set_password</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+                <span class="n">pyadobj</span><span class="o">.</span><span class="n">set_user_account_control_setting</span><span class="p">(</span><span class="s2">&quot;PASSWD_NOTREQD&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
             <span class="n">pyadobj</span><span class="o">.</span><span class="n">set_user_account_control_setting</span><span class="p">(</span><span class="s2">&quot;NORMAL_ACCOUNT&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-            <span class="n">pyadobj</span><span class="o">.</span><span class="n">set_user_account_control_setting</span><span class="p">(</span><span class="s2">&quot;PASSWD_NOTREQD&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
             <span class="n">pyadobj</span><span class="o">.</span><span class="n">update_attributes</span><span class="p">(</span><span class="n">optional_attributes</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">pyadobj</span>
         <span class="k">except</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">com_error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pyadobj</span><span class="p">:</span>
+                <span class="c1"># clean up the object if it was created</span>
+                <span class="n">pyadobj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
             <span class="n">pyadutils</span><span class="o">.</span><span class="n">pass_up_com_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ADContainer.create_group"><a class="viewcode-back" href="../../objects.html#pyad.adcontainer.ADContainer.create_group">[docs]</a>    <span class="k">def</span> <span class="nf">create_group</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">security_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;GLOBAL&quot;</span><span class="p">,</span> <span class="n">optional_attributes</span><span class="o">=</span><span class="p">{}</span>
-    <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a new group object in the container&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">security_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">scope</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;GLOBAL&quot;</span><span class="p">,</span>
+        <span class="n">optional_attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ADGroup</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new group object in the container</span>
+
+<span class="sd">        :param name: The Group Name</span>
+<span class="sd">        :type name: str</span>
+<span class="sd">        :param security_enabled: If this is a security enabled group or a distribution</span>
+<span class="sd">            group, defaults to True</span>
+<span class="sd">        :type security_enabled: bool, optional</span>
+<span class="sd">        :param scope: The scope of group. Must be one of [GLOBAL, LOCAL, UNIVERSAL].</span>
+<span class="sd">            Defaults to &quot;GLOBAL&quot;</span>
+<span class="sd">        :type scope: str, optional</span>
+<span class="sd">        :param optional_attributes: Additional attributes to set when creating the</span>
+<span class="sd">            object, defaults to {}</span>
+<span class="sd">        :type optional_attributes: Dict[str,Any], optional</span>
+<span class="sd">        :return: The created group object</span>
+<span class="sd">        :rtype: ADGroup</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__create_object</span><span class="p">(</span><span class="s2">&quot;group&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
@@ -120,10 +194,30 @@
             <span class="n">pyadobj</span><span class="o">.</span><span class="n">update_attributes</span><span class="p">(</span><span class="n">optional_attributes</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">pyadobj</span>
         <span class="k">except</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">com_error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">pyadutils</span><span class="o">.</span><span class="n">pass_up_com_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+            <span class="k">if</span> <span class="n">obj</span><span class="p">:</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+            <span class="n">pyadutils</span><span class="o">.</span><span class="n">pass_up_com_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">obj</span><span class="p">:</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid scope: </span><span class="si">{</span><span class="n">scope</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ADContainer.create_container"><a class="viewcode-back" href="../../objects.html#pyad.adcontainer.ADContainer.create_container">[docs]</a>    <span class="k">def</span> <span class="nf">create_container</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">optional_attributes</span><span class="o">=</span><span class="p">{}):</span>
-        <span class="sd">&quot;&quot;&quot;Create a new organizational unit in the container&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ADContainer.create_container"><a class="viewcode-back" href="../../objects.html#pyad.adcontainer.ADContainer.create_container">[docs]</a>    <span class="k">def</span> <span class="nf">create_container</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">optional_attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ADContainer&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new organizational unit in the container</span>
+
+<span class="sd">        :param name: The name of the container</span>
+<span class="sd">        :type name: str</span>
+<span class="sd">        :param optional_attributes: Additional attributes to set when creating the</span>
+<span class="sd">            object, defaults to {}</span>
+<span class="sd">        :type optional_attributes: Dict[str,Any], optional</span>
+<span class="sd">        :return: the created container object</span>
+<span class="sd">        :rtype: ADContainer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__create_object</span><span class="p">(</span><span class="s2">&quot;organizationalUnit&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
@@ -132,10 +226,29 @@
             <span class="n">pyadobj</span><span class="o">.</span><span class="n">update_attributes</span><span class="p">(</span><span class="n">optional_attributes</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">pyadobj</span>
         <span class="k">except</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">com_error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">obj</span><span class="p">:</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
             <span class="n">pyadutils</span><span class="o">.</span><span class="n">pass_up_com_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ADContainer.create_computer"><a class="viewcode-back" href="../../objects.html#pyad.adcontainer.ADContainer.create_computer">[docs]</a>    <span class="k">def</span> <span class="nf">create_computer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">enable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional_attributes</span><span class="o">=</span><span class="p">{}):</span>
-        <span class="sd">&quot;&quot;&quot;Create a new computer object in the container&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ADContainer.create_computer"><a class="viewcode-back" href="../../objects.html#pyad.adcontainer.ADContainer.create_computer">[docs]</a>    <span class="k">def</span> <span class="nf">create_computer</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">optional_attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ADComputer</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new computer object in the container</span>
+
+<span class="sd">        :param name: The computer name</span>
+<span class="sd">        :type name: str</span>
+<span class="sd">        :param enable: Whether the computer should be enabled or disabled,</span>
+<span class="sd">            defaults to True</span>
+<span class="sd">        :type enable: bool, optional</span>
+<span class="sd">        :param optional_attributes: Additional attributes to set when creating the</span>
+<span class="sd">            object, defaults to {}</span>
+<span class="sd">        :type optional_attributes: Dict[str,Any], optional</span>
+<span class="sd">        :return: the created computer object</span>
+<span class="sd">        :rtype: ADComputer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__create_object</span><span class="p">(</span><span class="s2">&quot;computer&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
@@ -151,9 +264,11 @@
             <span class="n">pyadobj</span><span class="o">.</span><span class="n">update_attributes</span><span class="p">(</span><span class="n">optional_attributes</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">pyadobj</span>
         <span class="k">except</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">com_error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">obj</span><span class="p">:</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
             <span class="n">pyadutils</span><span class="o">.</span><span class="n">pass_up_com_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ADContainer.remove_child"><a class="viewcode-back" href="../../objects.html#pyad.adcontainer.ADContainer.remove_child">[docs]</a>    <span class="k">def</span> <span class="nf">remove_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="ADContainer.remove_child"><a class="viewcode-back" href="../../objects.html#pyad.adcontainer.ADContainer.remove_child">[docs]</a>    <span class="k">def</span> <span class="nf">remove_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child</span><span class="p">:</span> <span class="n">ADObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Removes the child object from the domain&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ldap_adsi_obj</span><span class="o">.</span><span class="n">Delete</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">child</span><span class="o">.</span><span class="n">prefixed_cn</span><span class="p">)</span></div></div>

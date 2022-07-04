@@ -86,14 +86,18 @@
 <div class="viewcode-block" id="InvalidAttribute"><a class="viewcode-back" href="../../constants.html#pyad.pyadexceptions.InvalidAttribute">[docs]</a><span class="k">class</span> <span class="nc">InvalidAttribute</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="s1">&#39;The attribute &quot;</span><span class="si">%s</span><span class="s1">&quot; is not permitted by the schema definition of the object &quot;</span><span class="si">%s</span><span class="s1">&quot; (the requested attribute does not exist).&#39;</span>
+            <span class="s1">&#39;The attribute &quot;</span><span class="si">%s</span><span class="s1">&quot; is not permitted by the schema definition of the &#39;</span>
+            <span class="s1">&#39;object &quot;</span><span class="si">%s</span><span class="s1">&quot; (the requested attribute does not exist).&#39;</span>
             <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attribute</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">)</span>
         <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="noExecutedQuery"><a class="viewcode-back" href="../../constants.html#pyad.pyadexceptions.noExecutedQuery">[docs]</a><span class="k">class</span> <span class="nc">noExecutedQuery</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;No query has been executed. Therefore there are no results to return. Execute a query before requesting results.&quot;</span></div>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s2">&quot;No query has been executed. Therefore there are no results to return. &quot;</span>
+            <span class="s2">&quot;Execute a query before requesting results.&quot;</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="invalidResults"><a class="viewcode-back" href="../../constants.html#pyad.pyadexceptions.invalidResults">[docs]</a><span class="k">class</span> <span class="nc">invalidResults</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
@@ -102,8 +106,8 @@
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="s2">&quot;The specified query returned </span><span class="si">%i</span><span class="s2"> results. getSingleResults only functions with a single result.&quot;</span>
-            <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_results</span>
+            <span class="s2">&quot;The specified query returned </span><span class="si">%i</span><span class="s2"> results. getSingleResults only functions &quot;</span>
+            <span class="s2">&quot;with a single result.&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_results</span>
         <span class="p">)</span></div>
 
 
