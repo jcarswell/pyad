@@ -71,7 +71,7 @@ class ADGroup(ADObject):
         self,
         recursive: bool,
         ignore_groups: bool = False,
-        processedGroups: List[str] = [],
+        processed_groups: List[str] = [],
     ) -> List[ADObject]:
         """
         returns a list of pyAD objects that are members of the group.
@@ -81,14 +81,14 @@ class ADGroup(ADObject):
         :type recursive: bool
         :param ignore_groups: include groups in the list, defaults to False
         :type ignore_groups: bool, optional
-        :param processedGroups: A list of object IDs that have already been processed,
+        :param processed_groups: A list of object IDs that have already been processed,
             defaults to []
-        :type processedGroups: List[str]
+        :type processed_groups: List[str]
         :return: The members of the group
         :rtype: List[ADObject]
         """
 
-        processedGroups.append(self.guid)
+        processed_groups.append(self.guid)
         # we need to keep track of which groups have been enumerated so far so that
         # we don't enter an infinite loop accidentally if group A is a member
         # of group B and group B is a member of group A. Yes, this can actually happen.
@@ -96,13 +96,13 @@ class ADGroup(ADObject):
         for dn in self.get_attribute("member"):
             pyADobj = ADObject(dn, options=self._make_options())
             pyADobj.adjust_pyad_type()
-            if pyADobj.type == "group" and pyADobj.guid not in processedGroups:
+            if pyADobj.type == "group" and pyADobj.guid not in processed_groups:
                 if recursive:
                     ret.extend(
                         pyADobj._get_members(
                             recursive=True,
-                            ignoreGroups=ignore_groups,
-                            processedGroups=processedGroups,
+                            ignore_groups=ignore_groups,
+                            processed_groups=processed_groups,
                         )
                     )
                 if not ignore_groups:
@@ -139,7 +139,7 @@ class ADGroup(ADObject):
         :rtype: bool
         """
 
-        if check_member in self.get_members(recursive=recursive, ignoreGroups=False):
+        if check_member in self.get_members(recursive=recursive, ignore_groups=False):
             return True
         else:
             return False
