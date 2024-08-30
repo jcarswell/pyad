@@ -12,7 +12,7 @@ def read(fname):
 
 setup(
     name="python-win-ad",
-    version="0.6.1",
+    version="0.6.2",
     author="Zakir Durumeric",
     author_email="zakird@gmail.com",
     maintainer="Josh Carswell",
