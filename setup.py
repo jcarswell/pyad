@@ -12,7 +12,7 @@ def read(fname):
 
 setup(
     name="python-win-ad",
-    version="0.6.2",
+    version="0.6.3",
     author="Zakir Durumeric",
     author_email="zakird@gmail.com",
     maintainer="Josh Carswell",
@@ -38,11 +38,10 @@ setup(
         "Operating System :: Microsoft :: Windows",
         "Topic :: System :: Systems Administration :: Authentication/Directory :: LDAP",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
     ],
     install_requires=["setuptools", "pywin32"],
 )

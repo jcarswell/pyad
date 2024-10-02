@@ -1,3 +1,7 @@
+0.6.3 / 2024-10-02 / Guts
+
+	PR: change(log): use logging instead of print to allow upper packages manage the messaging level
+
 0.6.2 / 2022-07-04 / Josh Carswell
 
 	AD object creation functions clean themselves up when an error is encounter during creation.
