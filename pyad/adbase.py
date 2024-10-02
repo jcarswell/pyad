@@ -1,17 +1,20 @@
+import logging
 import sys
 import win32com.client
 
 from .pyadexceptions import SetupError
 
+logger = logging.getLogger(__name__)
 _adsi_provider = win32com.client.Dispatch("ADsNameSpaces")
 
 try:
     # Discover default domain and forest information
     __default_domain_obj = _adsi_provider.GetObject("", "LDAP://rootDSE")
 except:
-    # If there was an error, this this computer might not be on a domain.
-    print(
-        "WARN: unable to connect to default domain. Computer is likely not attached to an AD domain"
+    # If there was an error, this computer might not be on a domain.
+    logger.info(
+        "Unable to connect to default domain. "
+        "Computer is likely not attached to an AD domain."
     )
     __default_domain_obj = None
     _default_detected_forest = None
