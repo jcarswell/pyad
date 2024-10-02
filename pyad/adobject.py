@@ -1,3 +1,4 @@
+import logging
 import win32com
 import pywintypes
 import time
@@ -16,6 +17,7 @@ from .pyadconstants import (
     ADS_USER_FLAG,
 )
 
+logger = logging.getLogger(__name__)
 
 @total_ordering
 class ADObject(ADBase):
@@ -664,7 +666,7 @@ class ADObject(ADBase):
                             )
                         node.appendChild(text)
                     except:
-                        print("attribute: %s not xml-able" % attribute)
+                        logger.error("attribute: %s not xml-able" % attribute)
                 else:
                     node.setAttribute("type", "multiValued")
                     ok_elem = False
@@ -684,7 +686,7 @@ class ADObject(ADBase):
                                 node.appendChild(valnode)
                                 ok_elem = True
                     except:
-                        print("attribute: %s not xml-able" % attribute)
+                        logger.error("attribute: %s not xml-able" % attribute)
                 if ok_elem:
                     adobj_xml_doc.appendChild(node)
         return doc.toxml(encoding="UTF-8")
