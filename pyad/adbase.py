@@ -12,7 +12,7 @@ try:
     __default_domain_obj = _adsi_provider.GetObject("", "LDAP://rootDSE")
 except:
     # If there was an error, this computer might not be on a domain.
-    logger.info(
+    logger.debug(
         "Unable to connect to default domain. "
         "Computer is likely not attached to an AD domain."
     )
