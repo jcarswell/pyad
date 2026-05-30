@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
+
+[project]
+name = "python-win-ad"
+dynamic = ["version"]
+authors = [
+  { name="Zakir Durumeric", email="zakird@gmail.com" },
+]
+maintainers = [
+  {name = "Josh Carswell", email = "Josh.Carswell@thecarswells.ca"}
+]
+description = "An Object-Oriented Active Directory management framework built on ADSI"
+readme = "README.rst"
+requires-python = ">=3.6"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: Microsoft :: Windows",
+    "Topic :: System :: Systems Administration :: Authentication/Directory :: LDAP",
+]
+keywords = ["python", "microsoft", "windows active directory", "AD", "adsi", "pyad", "active directory"]
+dependencies = [ "pywin32>=301" ]
+
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+
+[project.urls]
+Homepage = "https://github.com/jcarswell/pyad/"
+Issues = "https://github.com/jcarswell/pyad/issues/"
+Documentation = "https://jcarswell.github.io/pyad/"
+Changelog = "https://github.com/jcarswell/pyad/blob/main/CHANGELOG"
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
