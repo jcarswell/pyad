@@ -1,6 +1,3 @@
-# package logger
-import logging
-logging.basicConfig(level=logging.WARNING)
 
 __all__ = [
     "set_defaults",
@@ -69,3 +66,8 @@ from .pyadexceptions import (
     noExecutedQuery,
     invalidResults,
 )
+
+
+if __name__ == "__main__":
+    import logging
+    logging.basicConfig(level=logging.WARNING)
