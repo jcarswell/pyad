@@ -1,6 +1,7 @@
 0.6.4 / 2024-10-02 / Guts
 
 	PR: fix(logs): run logging.basicConfig only in main mode
+	Update python metadata and build system
 
 0.6.3 / 2024-10-02 / Guts
 
