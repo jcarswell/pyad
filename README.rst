@@ -8,8 +8,9 @@ Introduction
 
 pyad is a Python library designed to provide a simple, Pythonic interface to Active Directory
 through ADSI on the Windows platform. Complete documentation can be found at
-http://jcarswell.github.io/pyad/. Code is maintained at https://github.com/jcarswell/pyad. The 
-library can be downloaded from PyPI at https://github.com/jcarswell/pyad.
+http://jcarswell.github.io/pyad/. Code is maintained at https://github.com/jcarswell/pyad. 
+
+This library is published on PyPI as python-win-ad.
 
 Breaking Changes from upstream
 ------------------------------
