@@ -37,3 +37,6 @@ Changelog = "https://github.com/jcarswell/pyad/blob/main/CHANGELOG"
 
 [tool.hatch.version]
 source = "uv-dynamic-versioning"
+
+[tool.hatch.build.targets.wheel]
+packages = ["pyad"]
